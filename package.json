@@ -1,0 +1,17 @@
+{
+  "name": "velora-web-os",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "tsc --noEmit && vite build && node scripts/create-preview.mjs",
+    "preview": "vite preview --host 0.0.0.0",
+    "check": "tsc --noEmit",
+    "test": "node --experimental-strip-types --test tests/*.test.mjs"
+  },
+  "devDependencies": {
+    "typescript": "~5.9.3",
+    "vite": "8.3.5"
+  }
+}
