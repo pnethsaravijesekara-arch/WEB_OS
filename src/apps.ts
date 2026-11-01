@@ -1,18 +1,21 @@
 import { icon, mark } from './icons';
-export type AppId = 'welcome' | 'about';
+import { settingsContent } from './settings';
+export type AppId = 'welcome' | 'about' | 'settings';
 export type GuideTab = 'start' | 'controls' | 'about';
 export const apps: { id: AppId; name: string; description: string; icon: string }[] = [
   { id: 'welcome', name: 'Welcome', description: 'Get started with Velora', icon: 'welcome' },
+  { id: 'settings', name: 'Settings', description: 'Personalize theme, accent, wallpaper and dock', icon: 'settings' },
   { id: 'about', name: 'About Velora', description: 'System information', icon: 'info' },
 ];
 export function appContent(id: AppId, tab: GuideTab = 'start'): string {
+  if (id === 'settings') return settingsContent();
   const selected = id === 'about' ? 'about' : tab;
   const content = selected === 'about' ? `
-    <div class="system-logo">${mark}</div><h1>Velora</h1><p class="version-label">Version 0.2.0 · First Light</p>
-    <dl class="system-details"><div><dt>Environment</dt><dd>Browser workspace</dd></div><div><dt>Release</dt><dd>Checkpoint 02</dd></div><div><dt>Creator</dt><dd>Pasindu Wijesekara</dd></div></dl>
+    <div class="system-logo">${mark}</div><h1>Velora</h1><p class="version-label">Version 0.3.0 · First Light</p>
+    <dl class="system-details"><div><dt>Environment</dt><dd>Browser workspace</dd></div><div><dt>Release</dt><dd>Checkpoint 03</dd></div><div><dt>Creator</dt><dd>Pasindu Wijesekara</dd></div></dl>
     <p class="boundary">Velora runs inside your browser. System controls affect this workspace only. The lock screen is a visual cover, not password protection.</p><p class="boundary">Files, music and offline installation will arrive in later checkpoints.</p>` : selected === 'controls' ? `
     <h1>Desktop controls</h1><p class="page-description">A few familiar ways to get around.</p>
-    <div class="instruction-list"><div>${icon('grid')}<span><strong>Open an app</strong><small>Use the dock, Apps menu or a desktop shortcut.</small></span></div><div>${icon('close')}<span><strong>Return to the desktop</strong><small>Close with ×; minimize with −; maximize with □.</small></span></div><div>${icon('sliders')}<span><strong>Adjust your workspace</strong><small>Open the controls at the top right for full screen and display options.</small></span></div><div>${icon('keyboard')}<span><strong>Use your keyboard</strong><small>Tab moves focus; arrows on a title bar move its window. Use the bottom-right resize handle with arrows to resize.</small></span></div></div><div class="inline-note">Ctrl + Alt + Tab switches windows. Ctrl + Alt + arrows snaps or restores. Shift-click a dock icon for another window.</div>` : `
+    <div class="instruction-list"><div>${icon('grid')}<span><strong>Open an app</strong><small>Use the dock, Apps menu or a desktop shortcut.</small></span></div><div>${icon('close')}<span><strong>Return to the desktop</strong><small>Close with ×; minimize with −; maximize with □.</small></span></div><div>${icon('sliders')}<span><strong>Adjust your workspace</strong><small>Open the controls at the top right for full screen and display options.</small></span></div><div>${icon('keyboard')}<span><strong>Use your keyboard</strong><small>Tab moves focus; arrows on a title bar move its window. Use the bottom-right resize handle with arrows to resize.</small></span></div></div><div class="inline-note">Ctrl + Alt + K opens commands. Ctrl + Alt + Space searches apps. Ctrl + Alt + Tab opens the window switcher. Ctrl + Alt + arrows snaps or restores. Shift-click a dock icon for another window.</div>` : `
     <div class="welcome-symbol">${mark}</div><h1>Welcome to Velora</h1><p class="page-description">Your desktop is ready.</p>
     <div class="action-list"><button data-guide="controls">${icon('grid')}<span><strong>Learn the basics</strong><small>Apps, dock and keyboard controls</small></span>${icon('chevron')}</button><button data-action="controls">${icon('sliders')}<span><strong>Desktop controls</strong><small>Full screen and display options</small></span>${icon('chevron')}</button><button data-app="about">${icon('info')}<span><strong>About this system</strong><small>Velora · First Light</small></span>${icon('chevron')}</button></div>
     <button class="primary" data-action="close-window">Start using Velora ${icon('arrow')}</button>`;

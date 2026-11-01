@@ -15,5 +15,5 @@ css = css.replace(/url\((?:"|')?(?:\.\.\/|\.\/|\/)?aurora\.webp(?:"|')?\)/g, `ur
 html = html.replace(/<script[^>]*src="[^"]+"[^>]*><\/script>/, () => `<script type="module">${js.replace(/<\/script/gi, '<\\/script')}</script>`);
 html = html.replace(/<link[^>]*href="[^"]+\.css"[^>]*>/, () => `<style>${css}</style>`);
 html = html.replace(/href="[^\"]*mark\.svg"/, `href="${mark}"`);
-await writeFile('dist/VELORA_Checkpoint_02_Preview.html', html);
+await writeFile('dist/VELORA_Checkpoint_03_Preview.html', html);
 console.log('Created self-contained review preview');

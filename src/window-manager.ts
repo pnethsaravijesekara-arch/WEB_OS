@@ -1,4 +1,5 @@
 import { apps, appContent, type AppId, type GuideTab } from './apps';
+import { syncSettings } from './settings';
 import { icon } from './icons';
 import { clampRect, placementRect, resized, type Rect, type Placement } from './geometry';
 
@@ -19,12 +20,19 @@ export class WindowManager {
     this.snapPreview = document.createElement('div');
     this.snapPreview.className = 'snap-preview'; this.snapPreview.hidden = true;
     this.snapPreview.setAttribute('aria-hidden', 'true'); options.host.append(this.snapPreview);
-    window.addEventListener('resize', () => {
+    const reflow = () => {
       this.cancelGesture?.();
       for (const w of this.windows) { w.normal = clampRect(w.normal, this.area()); w.rect = w.mode === 'normal' ? clampRect(w.rect, this.area()) : placementRect(w.mode, this.area()); this.paint(w); }
-    });
+    };
+    window.addEventListener('resize', reflow);
+    document.addEventListener('velora:layout', reflow);
   }
-  private area(): Rect { return { x: 8, y: 42, width: Math.max(1, window.innerWidth - 16), height: Math.max(1, window.innerHeight - 140) }; }
+  private area(): Rect {
+    const dock=document.querySelector<HTMLElement>('.dock');
+    const position=innerWidth<=600?'bottom':document.documentElement.dataset.dock??'bottom';
+    const side=position==='bottom'?0:(dock?.offsetWidth??80)+24;
+    return {x:position==='left'?side:8,y:42,width:Math.max(1,innerWidth-16-side),height:Math.max(1,innerHeight-42-(position==='bottom'?(dock?.offsetHeight??80)+30:8))};
+  }
   private paint(w: ManagedWindow): void {
     Object.assign(w.element.style, { left: `${w.rect.x}px`, top: `${w.rect.y}px`, width: `${w.rect.width}px`, height: `${w.rect.height}px` });
     w.element.dataset.placement = w.mode;
@@ -46,7 +54,8 @@ export class WindowManager {
     const definition = apps.find(item => item.id === app); if (!definition) return;
     const id = ++this.serial, offset = (this.windows.length % 6) * 30;
     const area = this.area();
-    const rect = clampRect({ x: Math.max(20, (area.width - 700) / 2 - 70) + offset, y: 72 + offset, width: 700, height: 500 }, area);
+    const width=app==='settings'?820:700,height=app==='settings'?580:500;
+    const rect = clampRect({ x: Math.max(20, (area.width - 700) / 2 - 70) + offset, y: 72 + offset, width, height }, area);
     const element = document.createElement('section');
     element.className = 'app-window'; element.dataset.window = String(id);
     element.setAttribute('aria-labelledby', `title-${id}`);
@@ -75,6 +84,7 @@ export class WindowManager {
       w.rect = target.dataset.edge ? resized(w.rect, target.dataset.edge, dx, dy, this.area()) : clampRect({ ...w.rect, x: w.rect.x + dx, y: w.rect.y + dy }, this.area());
       w.normal = { ...w.rect }; this.paint(w);
     });
+    syncSettings();document.dispatchEvent(new CustomEvent('velora:open',{detail:app}));
     this.focus(id); this.animate(w); this.options.announce(`${w.title} opened`);
   }
   focus(id: number, keyboard = true): void {

@@ -1,3 +1,5 @@
+import veloraSymbol from './assets/velora-symbol.svg?raw';
+import settingsSymbol from './assets/settings-symbol.svg?raw';
 const paths: Record<string, string> = {
   plus: '<path d="M12 5v14M5 12h14"/>',
   minus: '<path d="M5 12h14"/>',
@@ -22,6 +24,8 @@ const paths: Record<string, string> = {
   check: '<path d="m5 12 4 4L19 6"/>',
 };
 export function icon(name: string, className = ''): string {
+  if (name === 'settings') return settingsSymbol;
+  if (name === 'welcome') return veloraSymbol.replace('brand-mark','icon');
   return `<svg class="icon ${className}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${paths[name] ?? paths.info}</svg>`;
 }
-export const mark = '<svg class="brand-mark" viewBox="0 0 64 64" fill="currentColor" aria-hidden="true"><path d="M10 14h13l15 36H25L10 14Zm30 0h14L39 50H27l13-36Z"/></svg>';
+export const mark = veloraSymbol;

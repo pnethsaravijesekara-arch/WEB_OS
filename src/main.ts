@@ -2,24 +2,28 @@ import './styles/tokens.css';
 import './styles/desktop.css';
 import './styles/apps.css';
 import './styles/windows.css';
+import './styles/personalization.css';
+import './styles/navigation.css';
+import { Navigation } from './navigation';
+import { initializeSettings, getPreferences, updatePreferences, subscribePreferences, reducedMotion } from './settings';
 import { WindowManager } from './window-manager';
 import { icon, mark } from './icons';
 import { apps, type AppId, type GuideTab } from './apps';
 import { startClock } from './clock';
 
-const appTile = (id: AppId): string => `<span class="app-icon ${id}-icon">${id === 'welcome' ? mark : icon('info')}</span>`;
+const appTile = (id: AppId): string => `<span class="app-icon ${id}-icon">${id === 'welcome' ? mark : icon(apps.find(app=>app.id===id)!.icon)}</span>`;
 const root = document.querySelector<HTMLDivElement>('#app')!;
 root.innerHTML = `
-<main class="desktop" id="desktop" aria-label="Velora desktop" inert>
+<main class="desktop" id="desktop" aria-label="Velora desktop" tabindex="0" inert>
   <div class="wallpaper" aria-hidden="true"></div><div class="display-dimmer" aria-hidden="true"></div>
   <header class="system-bar"><div class="system-left"><button class="system-brand" data-panel="system-menu" aria-label="Velora menu" aria-expanded="false">${mark}</button><strong id="active-label">Desktop</strong><button class="bar-button" data-panel="launcher" aria-expanded="false">Apps</button><button class="bar-button" data-app="welcome">Help</button></div><div class="system-right"><button class="status-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button><button class="status-button" data-panel="controls" aria-label="Desktop controls" aria-expanded="false">${icon('sliders')}</button><button class="clock-button" data-panel="calendar" aria-label="Open calendar" aria-expanded="false"><span data-short-date></span><span data-clock></span></button></div></header>
   <div class="desktop-shortcuts">${apps.map(app=>`<button class="desktop-shortcut" data-app="${app.id}">${appTile(app.id)}<span>${app.name}</span></button>`).join('')}</div>
   <div id="windows" aria-label="Application windows"></div>
   <section class="shell-panel launcher" id="launcher" aria-labelledby="launcher-title" hidden><div class="panel-header"><h2 id="launcher-title">Applications</h2><button class="subtle-button" data-action="close-panel" aria-label="Close launcher">${icon('close')}</button></div><div class="launcher-grid">${apps.map(app=>`<button class="launcher-app" data-app="${app.id}">${appTile(app.id)}<strong>${app.name}</strong></button>`).join('')}</div><div class="running-windows" id="running-windows"></div><footer class="launcher-footer"><span class="user-avatar">P</span><span>Personal workspace</span><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></footer></section>
-  <section class="shell-panel control-center" id="controls" aria-label="Desktop controls" hidden><div class="panel-header"><h2>Desktop controls</h2><button class="subtle-button" data-action="close-panel" aria-label="Close controls">${icon('close')}</button></div><div class="control-grid"><button class="control-tile" data-action="fullscreen" aria-pressed="false">${icon('expand')}<strong>Full screen</strong><small id="fullscreen-label">Enter full screen</small></button><button class="control-tile" data-action="motion" aria-pressed="false">${icon('spark')}<strong>Reduce motion</strong><small>Workspace animations</small></button></div><label class="slider-label" for="brightness">${icon('sun')}<span>Workspace brightness</span><output id="brightness-value">100%</output></label><input id="brightness" type="range" min="45" max="100" value="100" aria-label="Workspace brightness"/><button class="control-row" data-action="transparency" aria-pressed="false"><span>Reduce transparency</span><span class="switch" aria-hidden="true"></span></button><div class="control-footer"><button class="subtle-button" data-action="shutdown" aria-label="Shut down workspace">${icon('power')}</button><span>Applies to this session</span><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></div></section>
+  <section class="shell-panel control-center" id="controls" aria-label="Desktop controls" hidden><div class="panel-header"><h2>Desktop controls</h2><button class="subtle-button" data-action="close-panel" aria-label="Close controls">${icon('close')}</button></div><div class="control-grid"><button class="control-tile" data-action="fullscreen" aria-pressed="false">${icon('expand')}<strong>Full screen</strong><small id="fullscreen-label">Enter full screen</small></button><button class="control-tile" data-action="motion" aria-pressed="false">${icon('spark')}<strong>Reduce motion</strong><small>Workspace animations</small></button></div><label class="slider-label" for="brightness">${icon('sun')}<span>Workspace brightness</span><output id="brightness-value">100%</output></label><input id="brightness" type="range" min="45" max="100" value="100" aria-label="Workspace brightness"/><button class="control-row" data-action="transparency" aria-pressed="false"><span>Reduce transparency</span><span class="switch" aria-hidden="true"></span></button><div class="control-footer"><button class="subtle-button" data-action="shutdown" aria-label="Shut down workspace">${icon('power')}</button><button class="settings-link" data-app="settings">Open Settings</button><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></div></section>
   <section class="shell-panel calendar-panel" id="calendar" aria-label="Calendar" hidden></section>
-  <section class="shell-panel system-menu" id="system-menu" aria-label="Velora menu" hidden><button data-app="about">${icon('info')}About Velora</button><button data-app="welcome">${icon('welcome')}Welcome</button><hr/><button data-action="controls">${icon('sliders')}Desktop controls</button><button data-action="fullscreen">${icon('expand')}Toggle full screen</button><hr/><button data-action="lock">${icon('lock')}Lock workspace</button><button data-action="restart">${icon('replay')}Restart…</button><button data-action="shutdown">${icon('power')}Shut down…</button></section>
-  <nav class="dock" aria-label="Desktop dock"><button class="dock-button launcher-trigger" data-panel="launcher" aria-label="Open app launcher" aria-expanded="false"><span class="dock-tile launcher-icon">${icon('grid')}</span><span class="tooltip">Applications</span></button><span class="dock-divider"></span>${apps.map(app=>`<button class="dock-button" data-app="${app.id}" aria-label="Open ${app.name}">${appTile(app.id)}<span class="tooltip">${app.name}</span><span class="running-dot" aria-hidden="true"></span></button>`).join('')}<span class="dock-divider"></span><button class="dock-button" data-panel="controls" aria-label="Open desktop controls" aria-expanded="false"><span class="dock-tile controls-icon">${icon('sliders')}</span><span class="tooltip">Controls</span></button></nav>
+  <section class="shell-panel system-menu" id="system-menu" aria-label="Velora menu" hidden><button data-app="about">${icon('info')}About Velora</button><button data-app="welcome">${icon('welcome')}Welcome</button><button data-app="settings">${icon('sliders')}Settings</button><hr/><button data-action="controls">${icon('sliders')}Desktop controls</button><button data-action="fullscreen">${icon('expand')}Toggle full screen</button><hr/><button data-action="lock">${icon('lock')}Lock workspace</button><button data-action="restart">${icon('replay')}Restart…</button><button data-action="shutdown">${icon('power')}Shut down…</button></section>
+  <div class="dock-edge" aria-hidden="true"></div><nav class="dock" aria-label="Desktop dock"><button class="dock-button launcher-trigger" data-panel="launcher" aria-label="Open app launcher" aria-expanded="false"><span class="dock-tile launcher-icon">${icon('grid')}</span><span class="tooltip">Applications</span></button><span class="dock-divider"></span>${apps.map(app=>`<button class="dock-button" data-app="${app.id}" aria-label="Open ${app.name}">${appTile(app.id)}<span class="tooltip">${app.name}</span><span class="running-dot" aria-hidden="true"></span></button>`).join('')}<span class="dock-divider"></span><button class="dock-button" data-panel="controls" aria-label="Open desktop controls" aria-expanded="false"><span class="dock-tile controls-icon">${icon('sliders')}</span><span class="tooltip">Controls</span></button></nav>
   <div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
 </main>
 <section class="lock-screen" id="lock-screen" aria-label="Workspace locked" hidden><div class="lock-date"><p data-date></p><div data-clock></div></div><div class="lock-account"><span class="account-avatar">P</span><h1>Personal workspace</h1><button class="unlock-button" data-action="unlock">Click to enter ${icon('arrow')}</button><small>Visual lock · no password protection</small><button class="lock-power" data-action="shutdown">${icon('power')} Shut down</button></div><button class="lock-replay" data-action="restart" aria-label="Restart workspace">${icon('replay')}</button></section>
@@ -38,11 +42,13 @@ const announcer = document.querySelector<HTMLElement>('#announcer')!;
 let bootTimer: ReturnType<typeof setTimeout>;
 let panelOpener: HTMLElement | null = null;
 let activePanel: HTMLElement | null = null;
-let reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+let navigation: Navigation | undefined;
+let reduceMotion = reducedMotion();
 let calendarOffset = 0;
 const motionDuration = (normal: number): number => reduceMotion ? 0 : normal;
 
 function closePanels(restoreFocus = false): void {
+  navigation?.dismiss(false);
   if (activePanel) activePanel.hidden = true;
   activePanel = null;
   document.querySelectorAll('[data-panel]').forEach(el=>el.setAttribute('aria-expanded','false'));
@@ -71,7 +77,7 @@ function togglePanel(id: string, opener: HTMLElement): void {
   panel.hidden=false;
   document.querySelectorAll(`[data-panel="${id}"]`).forEach(el=>el.setAttribute('aria-expanded','true'));
   panel.animate([{opacity:0,transform:`translateY(${id==='launcher'?'12':'-6'}px) scale(.97)`},{opacity:1,transform:'translateY(0) scale(1)'}],{duration:motionDuration(220),easing:'cubic-bezier(.2,.8,.2,1)'});
-  panel.querySelector<HTMLButtonElement>('button')?.focus({preventScroll:true});
+  if(id==='launcher')navigation?.prepareLauncher();else panel.querySelector<HTMLButtonElement>('button')?.focus({preventScroll:true});
 }
 const wm = new WindowManager({
   host: document.querySelector<HTMLElement>('#windows')!, reduced: () => reduceMotion,
@@ -84,7 +90,7 @@ const wm = new WindowManager({
       el.dataset.count = running.length ? String(running.length) : '';
       if(running.some(w => w.id === wm.active)) el.setAttribute('aria-current','true');else el.removeAttribute('aria-current');
     });
-    document.querySelector('#running-windows')!.innerHTML = wm.windows.length ? `<h3>Open windows</h3>${wm.windows.map(w => `<button data-window-id="${w.id}">${icon(w.app === 'welcome' ? 'welcome' : 'info')}<span>${w.title}</span><small>${w.minimized ? 'Minimized' : w.id === wm.active ? 'Active' : 'Open'}</small></button>`).join('')}` : '';
+    document.querySelector('#running-windows')!.innerHTML = wm.windows.length ? `<h3>Open windows</h3>${wm.windows.map(w => `<button data-window-id="${w.id}">${icon(apps.find(app=>app.id===w.app)!.icon)}<span>${w.title}</span><small>${w.minimized ? 'Minimized' : w.id === wm.active ? 'Active' : 'Open'}</small></button>`).join('')}` : '';
   }
 });
 function askPower(intent: 'shutdown' | 'restart', opener: HTMLElement): void {
@@ -168,8 +174,8 @@ document.addEventListener('click',event=>{
     case 'lock':lock();return;
     case 'unlock':unlock();return;
     case 'fullscreen':void toggleFullscreen();return;
-    case 'motion':reduceMotion=!reduceMotion;document.documentElement.classList.toggle('reduce-motion',reduceMotion);button.setAttribute('aria-pressed',String(reduceMotion));return;
-    case 'transparency':{const reduced=document.documentElement.classList.toggle('reduce-transparency');button.setAttribute('aria-pressed',String(reduced));return;}
+    case 'motion':updatePreferences({motion:!getPreferences().motion});return;
+    case 'transparency':updatePreferences({transparency:!getPreferences().transparency});return;
     case 'previous-month':calendarOffset--;renderCalendar();document.querySelector<HTMLButtonElement>('[data-action="previous-month"]')?.focus();return;
     case 'next-month':calendarOffset++;renderCalendar();document.querySelector<HTMLButtonElement>('[data-action="next-month"]')?.focus();return;
     case 'today':calendarOffset=0;renderCalendar();document.querySelector<HTMLButtonElement>('[data-action="today"]')?.focus();return;
@@ -183,11 +189,13 @@ document.querySelector<HTMLInputElement>('#brightness')!.addEventListener('input
 });
 document.addEventListener('keydown',event=>{
   if(powerDialog.open || !powerOff.hidden)return;
+  if(navigation?.handleKey(event))return;
   if(event.key==='Escape'){
-    if(!boot.hidden)finishBoot();else if(!lockScreen.hidden)unlock();else if(activePanel)closePanels(true);
+    if(!boot.hidden){if(!skipButton.disabled)finishBoot();}else if(!lockScreen.hidden)unlock();else if(activePanel)closePanels(true);
     return;
   }
   if(desktop.inert)return;
+  if(event.ctrlKey && event.altKey && event.code==='Space'){event.preventDefault();togglePanel('launcher',document.querySelector<HTMLElement>('.launcher-trigger')!);return;}
   if(event.ctrlKey && event.altKey){
     const id=wm.active;
     if(event.key==='Tab'){event.preventDefault();wm.cycle(event.shiftKey);}
@@ -200,8 +208,19 @@ document.addEventListener('keydown',event=>{
     }
   }
 });
-const motionPreference=matchMedia('(prefers-reduced-motion: reduce)');
-motionPreference.addEventListener('change',event=>{reduceMotion=event.matches;document.documentElement.classList.toggle('reduce-motion',reduceMotion);document.querySelector('[data-action="motion"]')?.setAttribute('aria-pressed',String(reduceMotion));});
-document.querySelector('[data-action="motion"]')?.setAttribute('aria-pressed',String(reduceMotion));
+navigation=new Navigation({wm,closePanels,canUse:()=>!desktop.inert&&!powerDialog.open,runAction:id=>{
+  if(id==='desktop'){closePanels();[...wm.windows].forEach(w=>wm.minimize(w.id));}
+  else if(id==='fullscreen')void toggleFullscreen();
+  else if(id==='lock')lock();
+  else if(id==='shutdown')askPower('shutdown',document.querySelector<HTMLElement>('.system-brand')!);
+}});
+subscribePreferences(()=>{
+  reduceMotion=reducedMotion();
+  document.querySelector('[data-action="motion"]')?.setAttribute('aria-pressed',String(reduceMotion));
+  document.querySelector('[data-action="transparency"]')?.setAttribute('aria-pressed',String(getPreferences().transparency));
+  document.dispatchEvent(new Event('velora:layout'));
+});
 const clock = startClock();
-startBoot();
+const skipButton=boot.querySelector<HTMLButtonElement>('button')!;
+skipButton.disabled=true;
+void initializeSettings().finally(()=>{skipButton.disabled=false;startBoot();});
