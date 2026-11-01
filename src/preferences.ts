@@ -15,7 +15,7 @@ export function sanitizePreferences(value: unknown): Preferences {
     dockPosition: ['bottom','left','right'].includes(String(v.dockPosition)) ? v.dockPosition as Preferences['dockPosition'] : 'bottom',
     dockSize: typeof v.dockSize === 'number' && Number.isFinite(v.dockSize) ? Math.min(64,Math.max(36,Math.round(v.dockSize))) : 52,
     dockHide: v.dockHide === true, motion: v.motion === true, transparency:v.transparency === true,
-    recent: Array.isArray(v.recent) ? [...new Set(v.recent.filter(x=>['welcome','about','settings'].includes(x)))].slice(0,3) : [],
+    recent: Array.isArray(v.recent) ? [...new Set(v.recent.filter(x=>['welcome','about','settings','files','notes','music','gallery','calculator','terminal','calendar','paint','video','recorder','clock'].includes(x)))].slice(0,3) : [],
   };
 }
 export function addRecent(recent: string[], app: string): string[] { return [app,...recent.filter(id=>id!==app)].slice(0,3); }

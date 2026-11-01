@@ -1,3 +1,4 @@
+import {afterglow,firstLight} from './samples';
 export type Entry = { id:string; parent:string; name:string; folder:boolean; type:string; size:number; modified:number };
 export const ROOT = 'root';
 const changes = new EventTarget();
@@ -10,13 +11,19 @@ const cleanName=(name:string)=>{
 };
 function database():Promise<IDBDatabase>{
   if(!connection) connection=new Promise<IDBDatabase>((resolve,reject)=>{
-    const request=indexedDB.open('velora-drive',1);
+    const request=indexedDB.open('velora-drive',2);
     request.onupgradeneeded=()=>{
-      const entries=request.result.createObjectStore('entries',{keyPath:'id'});
-      const bodies=request.result.createObjectStore('bodies');
+      const fresh=!request.result.objectStoreNames.contains('entries');
+      const entries=fresh?request.result.createObjectStore('entries',{keyPath:'id'}):request.transaction!.objectStore('entries');
+      const bodies=fresh?request.result.createObjectStore('bodies'):request.transaction!.objectStore('bodies');
+      if(fresh){
       for(const name of ['Documents','Pictures','Music'])entries.put({id:name,parent:ROOT,name,folder:true,type:'',size:0,modified:Date.now()});
       const text=new Blob(['Welcome to Velora.\n\nThis drive lives in your browser. Create a file, import a song or open the terminal to explore.'],{type:'text/plain'});
       entries.put({id:'readme',parent:'Documents',name:'Welcome.txt',folder:false,type:text.type,size:text.size,modified:Date.now()});bodies.put(text,'readme');
+      }
+      for(const [id,parent,name,blob] of [['demo-pic','Pictures','Afterglow.svg',afterglow()],['demo-audio','Music','First Light.wav',firstLight()]] as const){
+        const q=entries.get(parent);q.onsuccess=()=>{entries.put({id,parent:q.result?parent:ROOT,name,folder:false,type:blob.type,size:blob.size,modified:Date.now()});bodies.put(blob,id);};
+      }
     };
     request.onsuccess=()=>{request.result.onversionchange=()=>{request.result.close();connection=undefined;};resolve(request.result);};
     request.onerror=()=>reject(Error('Browser storage is unavailable.'));

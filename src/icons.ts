@@ -1,8 +1,16 @@
 import veloraSymbol from './assets/velora-symbol.svg?raw';
 import settingsSymbol from './assets/settings-symbol.svg?raw';
 const paths: Record<string, string> = {
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
+  microphone:'<rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/>',
+  brush:'<path d="m10 15 8-11q3-3 3 1l-9 12m-2-2c-6-2-4 6-8 5 5 3 11 1 10-3z"/>',
+  video:'<rect x="2" y="5" width="20" height="14" rx="3"/><path d="m10 9 5 3-5 3z"/>',
   folder:'<path d="M3 7a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" fill="currentColor" fill-opacity=".18"/><path d="M4 10h16"/>',
   file:'<path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/>',
+  notes:'<rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 8h8m-8 4h8m-8 4h5"/>',
+  music:'<path d="M10 17V6l10-2v11M10 9l10-2"/><ellipse cx="7" cy="18" rx="3" ry="2.5" fill="currentColor"/><ellipse cx="17" cy="16" rx="3" ry="2.5" fill="currentColor"/>',
+  image:'<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="15.5" cy="9" r="1.5" fill="currentColor"/><path d="m4 17 5-6 4 4 3-3 4 5"/>',
+  calculator:'<rect x="5" y="2" width="14" height="20" rx="3"/><path d="M8 7h8M9 12h1m4 0h1m-6 4h1m4 0h1"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   minus: '<path d="M5 12h14"/>',
   square: '<rect x="5" y="5" width="14" height="14" rx="2"/>',

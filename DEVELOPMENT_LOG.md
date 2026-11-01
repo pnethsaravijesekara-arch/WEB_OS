@@ -181,3 +181,9 @@ Built keyboard search, recent apps, command palette, window switcher and desktop
 
 ## Checkpoint 04 · Virtual drive
 Added transactional IndexedDB metadata and Blob stores, folders, text creation, browser file import, move, rename, confirmed recursive delete and text/image previews. Tested production compilation and created Studio.txt through Files. Waited for it to appear, reloaded Chrome, reopened Files and found Studio.txt. Reveal and Sinhala narration: “Browser එක reload කළත් අපි හදපු file එක අපේ drive එකේ තියෙනවා.” Source: vfs.ts, files.ts, ui.ts and window lifecycle integration.
+
+## 05 · Everyday applications
+Built and registered Notepad, Music, Video Player, Gallery, Calculator, Calendar, Paint, Clock and Sound Recorder. Text, media, drawings and events share the virtual drive. The recorder releases the microphone on close. Canvas undo is capped at five frames. Fixed audio-only WebM imports being routed to Video Player. Main changes are in productivity.ts, calendar.ts, paint.ts, utilities.ts, calculation.ts, samples.ts and the app registry. TypeScript and the production build pass. Arithmetic tests cover parsing, precedence and invalid input. In the browser the bundled WAV loaded with playback controls and Notepad accepted an edit. Physical microphone capture requires a separate device check.
+
+Reveal: draw a sketch, save to Pictures and view it in Gallery while Music is playing.
+Sinhala VO — “මේ චිත්‍රය Paint එකෙන් ඇඳලා save කළාම, ඒක අපේ Gallery එකෙන්ම බලන්න පුළුවන්.”

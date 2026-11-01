@@ -1,15 +1,24 @@
 import { icon, mark } from './icons';
 import { settingsContent } from './settings';
-export type AppId = 'welcome' | 'about' | 'settings' | 'files';
+export type AppId = 'welcome' | 'about' | 'settings' | 'files' | 'notes' | 'music' | 'gallery' | 'calculator' | 'paint' | 'calendar' | 'video' | 'clock' | 'recorder';
 export type GuideTab = 'start' | 'controls' | 'about';
 export const apps: { id: AppId; name: string; description: string; icon: string }[] = [
   { id: 'welcome', name: 'Welcome', description: 'Get started with Velora', icon: 'welcome' },
   { id: 'settings', name: 'Settings', description: 'Personalize theme, accent, wallpaper and dock', icon: 'settings' },
   { id:'files',name:'Files',description:'Explore and import local files',icon:'folder' },
+  { id:'notes',name:'Notepad',description:'Notes · Write and autosave text documents',icon:'notes' },
+  { id:'music',name:'Music',description:'Play local songs and audio',icon:'music' },
+  { id:'gallery',name:'Gallery',description:'Browse local images and photos',icon:'image' },
+  { id:'calculator',name:'Calculator',description:'Calculate arithmetic expressions',icon:'calculator' },
+  { id:'calendar',name:'Calendar',description:'Month planner and local events',icon:'calendar' },
+  { id:'paint',name:'Paint',description:'Sketch and save PNG drawings',icon:'brush' },
+  { id:'video',name:'Video Player',description:'Play local movies and clips',icon:'video' },
+  { id:'clock',name:'Clock',description:'Stopwatch and countdown timer',icon:'clock' },
+  { id:'recorder',name:'Sound Recorder',description:'Record voice memos using your microphone',icon:'microphone' },
   { id: 'about', name: 'About Velora', description: 'System information', icon: 'info' },
 ];
 export function appContent(id: AppId, tab: GuideTab = 'start'): string {
-  if (id === 'files') return '';
+  if (!['welcome','settings','about'].includes(id)) return '';
   if (id === 'settings') return settingsContent();
   const selected = id === 'about' ? 'about' : tab;
   const content = selected === 'about' ? `
