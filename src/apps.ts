@@ -1,6 +1,6 @@
 import { icon, mark } from './icons';
 import { settingsContent } from './settings';
-export type AppId = 'welcome' | 'about' | 'settings' | 'files' | 'notes' | 'music' | 'gallery' | 'calculator' | 'paint' | 'calendar' | 'video' | 'clock' | 'recorder';
+export type AppId = 'welcome' | 'about' | 'settings' | 'files' | 'notes' | 'music' | 'gallery' | 'calculator' | 'paint' | 'calendar' | 'video' | 'clock' | 'recorder' | 'terminal';
 export type GuideTab = 'start' | 'controls' | 'about';
 export const apps: { id: AppId; name: string; description: string; icon: string }[] = [
   { id: 'welcome', name: 'Welcome', description: 'Get started with Velora', icon: 'welcome' },
@@ -15,6 +15,7 @@ export const apps: { id: AppId; name: string; description: string; icon: string 
   { id:'video',name:'Video Player',description:'Play local movies and clips',icon:'video' },
   { id:'clock',name:'Clock',description:'Stopwatch and countdown timer',icon:'clock' },
   { id:'recorder',name:'Sound Recorder',description:'Record voice memos using your microphone',icon:'microphone' },
+  { id:'terminal',name:'Terminal',description:'Navigate the virtual drive and run commands',icon:'terminal' },
   { id: 'about', name: 'About Velora', description: 'System information', icon: 'info' },
 ];
 export function appContent(id: AppId, tab: GuideTab = 'start'): string {

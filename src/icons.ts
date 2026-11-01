@@ -1,6 +1,7 @@
 import veloraSymbol from './assets/velora-symbol.svg?raw';
 import settingsSymbol from './assets/settings-symbol.svg?raw';
 const paths: Record<string, string> = {
+  terminal:'<rect x="2" y="4" width="20" height="16" rx="3"/><path d="m6 9 3 3-3 3m6 0h5"/>',
   clock:'<circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/>',
   microphone:'<rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/>',
   brush:'<path d="m10 15 8-11q3-3 3 1l-9 12m-2-2c-6-2-4 6-8 5 5 3 11 1 10-3z"/>',

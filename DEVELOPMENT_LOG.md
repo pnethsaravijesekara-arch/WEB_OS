@@ -187,3 +187,9 @@ Built and registered Notepad, Music, Video Player, Gallery, Calculator, Calendar
 
 Reveal: draw a sketch, save to Pictures and view it in Gallery while Music is playing.
 Sinhala VO — “මේ චිත්‍රය Paint එකෙන් ඇඳලා save කළාම, ඒක අපේ Gallery එකෙන්ම බලන්න පුළුවන්.”
+
+## 06 · Terminal
+Built a keyboard shell in terminal.ts, registered its vector icon and wired it to the window manager and drive. Commands include help, clear, date, pwd, ls, cd, mkdir, touch, cat, history, apps and open. Text output uses DOM text nodes. The browser test navigated to Documents, printed the path, listed saved files and opened Calculator. Calculator returned 14 for 2+3*4. The production build passed.
+
+Reveal: type “open calculator” from inside Documents.
+Sinhala VO — “Terminal එකෙන් අපේ drive එක ඇතුළේ යන්නත්, වෙන app එකක් අරින්නත් පුළුවන්.”

@@ -7,6 +7,7 @@ import './styles/navigation.css';
 import { Navigation } from './navigation';
 import { initializeSettings, getPreferences, updatePreferences, subscribePreferences, reducedMotion } from './settings';
 import {mountNotes,mountMedia,mountCalculator,isText,isImage,isAudio,isVideo} from './productivity';
+import {mountTerminal} from './terminal';
 import {mountRecorder,mountClock} from './utilities';
 import {mountCalendar} from './calendar';
 import {mountPaint} from './paint';
@@ -89,6 +90,7 @@ const wm = new WindowManager({
   mount:(w,file)=>{const view=w.element.querySelector<HTMLElement>('.window-content')!;
     if(w.app==='files')return mountFiles(view,n=>{if(isVideo(n))wm.open('video',n.id);else if(isText(n)&&n.size<=1048576)wm.open('notes',n.id);else if(isImage(n))wm.open('gallery',n.id);else if(isAudio(n))wm.open('music',n.id);else void previewFile(n);});
     if(w.app==='notes')return mountNotes(view,file);
+    if(w.app==='terminal')return mountTerminal(view,id=>wm.open(id));
     if(w.app==='clock')return mountClock(view);
     if(w.app==='recorder')return mountRecorder(view);
     if(w.app==='calendar')return mountCalendar(view);
