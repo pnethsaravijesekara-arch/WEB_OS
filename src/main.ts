@@ -7,6 +7,9 @@ import './styles/navigation.css';
 import { Navigation } from './navigation';
 import { initializeSettings, getPreferences, updatePreferences, subscribePreferences, reducedMotion } from './settings';
 import {mountNotes,mountMedia,mountCalculator,isText,isImage,isAudio,isVideo} from './productivity';
+import {mountWidgets} from './widgets';
+import {alarmPower} from './alarm';
+import {mountBrowser} from './browser';
 import {mountTerminal} from './terminal';
 import {mountRecorder,mountClock} from './utilities';
 import {mountCalendar} from './calendar';
@@ -24,7 +27,7 @@ root.innerHTML = `
 <main class="desktop" id="desktop" aria-label="Velora desktop" tabindex="0" inert>
   <div class="wallpaper" aria-hidden="true"></div><div class="display-dimmer" aria-hidden="true"></div>
   <header class="system-bar"><div class="system-left"><button class="system-brand" data-panel="system-menu" aria-label="Velora menu" aria-expanded="false">${mark}</button><strong id="active-label">Desktop</strong><button class="bar-button" data-panel="launcher" aria-expanded="false">Apps</button><button class="bar-button" data-app="welcome">Help</button></div><div class="system-right"><button class="status-button" data-action="overview" aria-label="Workspace overview" title="Workspace overview">${icon('grid')}</button><button class="status-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button><button class="status-button" data-panel="controls" aria-label="Desktop controls" aria-expanded="false">${icon('sliders')}</button><button class="clock-button" data-panel="calendar" aria-label="Open calendar" aria-expanded="false"><span data-short-date></span><span data-clock></span></button></div></header>
-  <div class="desktop-shortcuts">${apps.filter(a=>['files','settings','about'].includes(a.id)).map(app=>`<button class="desktop-shortcut" data-app="${app.id}">${appTile(app.id)}<span>${app.name}</span></button>`).join('')}</div>
+  <aside class="desktop-widgets" aria-label="Desktop widgets"></aside><div class="desktop-shortcuts">${apps.filter(a=>['files','settings','about'].includes(a.id)).map(app=>`<button class="desktop-shortcut" data-app="${app.id}">${appTile(app.id)}<span>${app.name}</span></button>`).join('')}</div>
   <div id="windows" aria-label="Application windows"></div>
   <section class="shell-panel launcher" id="launcher" aria-labelledby="launcher-title" hidden><div class="panel-header"><h2 id="launcher-title">Applications</h2><button class="subtle-button" data-action="close-panel" aria-label="Close launcher">${icon('close')}</button></div><div class="launcher-grid">${apps.map(app=>`<button class="launcher-app" data-app="${app.id}">${appTile(app.id)}<strong>${app.name}</strong></button>`).join('')}</div><div class="running-windows" id="running-windows"></div><footer class="launcher-footer"><span class="user-avatar">P</span><span>Personal workspace</span><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></footer></section>
   <section class="shell-panel control-center" id="controls" aria-label="Desktop controls" hidden><div class="panel-header"><h2>Desktop controls</h2><button class="subtle-button" data-action="close-panel" aria-label="Close controls">${icon('close')}</button></div><div class="control-grid"><button class="control-tile" data-action="fullscreen" aria-pressed="false">${icon('expand')}<strong>Full screen</strong><small id="fullscreen-label">Enter full screen</small></button><button class="control-tile" data-action="motion" aria-pressed="false">${icon('spark')}<strong>Reduce motion</strong><small>Workspace animations</small></button></div><label class="slider-label" for="brightness">${icon('sun')}<span>Workspace brightness</span><output id="brightness-value">100%</output></label><input id="brightness" type="range" min="45" max="100" value="100" aria-label="Workspace brightness"/><button class="control-row" data-action="transparency" aria-pressed="false"><span>Reduce transparency</span><span class="switch" aria-hidden="true"></span></button><div class="control-footer"><button class="subtle-button" data-action="shutdown" aria-label="Shut down workspace">${icon('power')}</button><button class="settings-link" data-app="settings">Open Settings</button><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></div></section>
@@ -91,6 +94,7 @@ const wm = new WindowManager({
   mount:(w,file)=>{const view=w.element.querySelector<HTMLElement>('.window-content')!;
     if(w.app==='files')return mountFiles(view,n=>{if(isVideo(n))wm.open('video',n.id);else if(isText(n)&&n.size<=1048576)wm.open('notes',n.id);else if(isImage(n))wm.open('gallery',n.id);else if(isAudio(n))wm.open('music',n.id);else void previewFile(n);});
     if(w.app==='notes')return mountNotes(view,file);
+    if(w.app==='browser')return mountBrowser(view);
     if(w.app==='terminal')return mountTerminal(view,id=>wm.open(id));
     if(w.app==='clock')return mountClock(view);
     if(w.app==='recorder')return mountRecorder(view);
@@ -123,6 +127,7 @@ function resetDisplay(): void {
   desktop.style.setProperty('--dim','0');document.querySelector<HTMLInputElement>('#brightness')!.value='100';document.querySelector('#brightness-value')!.textContent='100%';
 }
 function shutDown(): void {
+  alarmPower(false);
   clearTimeout(bootTimer);clearTimeout(revealTimer);closePanels();wm.closeAll();clock.pause();resetDisplay();
   boot.hidden=true;lockScreen.hidden=true;desktop.inert=true;powerOff.hidden=false;
   powerOff.querySelector<HTMLButtonElement>('button')!.focus();
@@ -148,6 +153,7 @@ function unlock(): void {
 }
 function finishBoot(): void {
   if(boot.hidden)return;
+  alarmPower(true);
   clearTimeout(bootTimer);boot.hidden=true;desktop.inert=false;
   desktop.animate([{opacity:0,transform:'scale(1.04)'},{opacity:1,transform:'scale(1)'}],{duration:motionDuration(450),easing:'cubic-bezier(.16,1,.3,1)'});
   document.querySelector<HTMLButtonElement>('.launcher-trigger')?.focus();
@@ -156,6 +162,7 @@ function finishBoot(): void {
   },motionDuration(550));
 }
 function startBoot(): void {
+  alarmPower(false);
   clearTimeout(bootTimer);clearTimeout(revealTimer);closePanels();wm.closeAll();clock.resume();resetDisplay();
   powerOff.hidden=true;lockScreen.hidden=true;desktop.inert=true;boot.hidden=false;
   boot.querySelector<HTMLButtonElement>('button')?.focus();
@@ -248,6 +255,7 @@ subscribePreferences(()=>{
   document.querySelector('[data-action="transparency"]')?.setAttribute('aria-pressed',String(getPreferences().transparency));
   document.dispatchEvent(new Event('velora:layout'));
 });
+mountWidgets(document.querySelector('.desktop-widgets')!);
 const clock = startClock();
 const skipButton=boot.querySelector<HTMLButtonElement>('button')!;
 skipButton.disabled=true;
@@ -284,4 +292,11 @@ async function previewFile(n:fs.Entry):Promise<void>{
     else if(n.type.startsWith('text/')||/\.(txt|md)$/i.test(n.name)){const pre=document.createElement('pre');pre.style.cssText='white-space:pre-wrap;overflow:auto;max-height:50vh';pre.textContent=await file.slice(0,262144).text();area.append(pre);}
     else area.textContent='No preview available · '+n.size+' bytes';
   }catch{area.textContent='Unable to open this file.';}
+}
+
+// Service workers require a secure hosted origin. The single-file edition embeds its shell.
+if(import.meta.env.PROD && !document.documentElement.hasAttribute('data-portable') && 'serviceWorker' in navigator && window.isSecureContext){
+  window.addEventListener('load',()=>{void navigator.serviceWorker.register(new URL('./sw.js',document.baseURI).href).catch(()=>{
+    announcer.textContent='Offline installation is unavailable in this browser.';
+  });});
 }

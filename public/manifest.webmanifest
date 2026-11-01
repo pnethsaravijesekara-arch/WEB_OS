@@ -1,0 +1,1 @@
+{"id":"./","name":"Velora OS · First Light","short_name":"Velora","description":"A personal browser desktop.","lang":"en","start_url":"./","scope":"./","display":"standalone","theme_color":"#101827","background_color":"#0a0e17","icons":[{"src":"icons/velora-192.png","sizes":"192x192","type":"image/png"},{"src":"icons/velora-512.png","sizes":"512x512","type":"image/png"}]}

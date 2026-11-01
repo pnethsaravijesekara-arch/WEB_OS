@@ -199,3 +199,14 @@ Added powered-off startup, Start PC, skippable boot, live wallpaper and automati
 
 Reveal: power on, let the wallpaper and About appear, then show all running apps in overview.
 Sinhala VO — “Start PC ඔබද්දි desktop එක පණ ගන්නවා. මේ තියෙන්නේ අපේම Velora OS එක.”
+
+## 08 · Portable release
+
+Added the production service worker, install manifest, PNG renditions of the original vector logo, portable HTML export and Windows batch launcher. Built Browser with address/search, bookmarks, isolated web frames, external-tab fallback and local history. Extended Clock with a persistent alarm. Added Clock, Weather and Calendar widgets with position, color and material controls. Weather refresh uses real Open-Meteo geocoding and forecast results and retains the last reading with its timestamp.
+
+Changed the build scripts, package metadata, README, roadmap, recording checklist, Sinhala script, main.ts, browser.ts, alarm.ts, widgets.ts, Clock, settings, app registry and desktop styles. Fixed the city editor after a browser test showed that leaving the text field could lose a city change. An explicit Apply city action now commits the edit. The release check verifies manifest icons, batch target and self-contained assets as well as offline shell requests.
+
+Verified in Chrome: cold boot and automatic About, drawing saved from Paint and opened in Gallery, calendar event and dark theme surviving reload, Terminal opening Calculator, Browser back/forward, scheduling an alarm and a real Colombo weather result. A second boot restored the cached city, temperature, widget palette, outline style and lower placement. The release test used the generated worker with its network disabled in a CacheStorage harness. Hardware checks for Windows execution, target-PC frame rate, microphone/speaker output and an installed browser disconnected from the network remain for the filming machine.
+
+Reveal: start the Windows launcher, press Start PC and bring up the personalized workspace.
+Sinhala VO — “මේ තමයි Velora එකේ final build එක. එක click එකකින් පටන් අරන්, අපේ apps ඔක්කොම මෙතැනින් පාවිච්චි කරන්න පුළුවන්.”

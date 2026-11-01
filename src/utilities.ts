@@ -1,8 +1,11 @@
+import {mountAlarm} from './alarm';
 import * as fs from './vfs';
 import { errorText } from './ui';
 
 export function mountClock(root:HTMLElement):()=>void {
-  root.innerHTML=`<section class="tool-shell time-app"><div class="tool-toolbar"><select aria-label="Clock mode"><option>Stopwatch</option><option>Timer</option></select></div><div class="time-face"><small>VELORA CLOCK</small><output aria-label="Elapsed time">00:00.0</output><label hidden>Minutes <input type="number" min=".1" max="1440" step=".1" value="5"></label><div><button data-start>Start</button> <button data-reset>Reset</button></div><p role="status"></p></div></section>`;
+  root.innerHTML=`<section class="tool-shell time-app"><div class="tool-toolbar"><select aria-label="Clock mode"><option>Stopwatch</option><option>Timer</option><option>Alarm</option></select></div><div class="time-face"><small>VELORA CLOCK</small><output aria-label="Elapsed time">00:00.0</output><label hidden>Minutes <input type="number" min=".1" max="1440" step=".1" value="5"></label><div><button data-start>Start</button> <button data-reset>Reset</button></div><p role="status"></p></div><div class="time-face alarm-face" hidden></div></section>`;
+  const alarm=root.querySelector<HTMLElement>('.alarm-face')!,normal=root.querySelector<HTMLElement>('.time-face')!;
+  const closeAlarm=mountAlarm(alarm);
   const mode=root.querySelector('select')!,input=root.querySelector('input')!,display=root.querySelector('output')!;
   const start=root.querySelector<HTMLButtonElement>('[data-start]')!,status=root.querySelector('p')!;
   let since:number|null=null,elapsed=0,timer=0;
@@ -17,8 +20,8 @@ export function mountClock(root:HTMLElement):()=>void {
   function reset(){stop();elapsed=0;status.textContent='';root.querySelector('label')!.hidden=mode.value!=='Timer';paint();}
   start.onclick=()=>{if(since!==null){stop();paint();return;}if(mode.value==='Timer'&&!input.reportValidity())return;
     status.textContent='';since=performance.now();input.disabled=true;start.textContent='Pause';timer=window.setInterval(paint,100);paint();};
-  mode.onchange=reset;input.oninput=reset;root.querySelector<HTMLButtonElement>('[data-reset]')!.onclick=reset;
-  return stop;
+  mode.onchange=()=>{reset();alarm.hidden=mode.value!=='Alarm';normal.hidden=!alarm.hidden;};input.oninput=reset;root.querySelector<HTMLButtonElement>('[data-reset]')!.onclick=reset;
+  return ()=>{stop();closeAlarm();};
 }
 
 export function mountRecorder(root:HTMLElement):()=>void {

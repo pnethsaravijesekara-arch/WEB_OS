@@ -12,6 +12,7 @@ export function startClock(): { pause: () => void; resume: () => void } {
     document.querySelectorAll<HTMLElement>('[data-clock]').forEach(el => { el.textContent = time.format(now); });
     document.querySelectorAll<HTMLElement>('[data-date]').forEach(el => { el.textContent = date.format(now); });
     document.querySelectorAll<HTMLElement>('[data-short-date]').forEach(el => { el.textContent = shortDate.format(now); });
+    document.dispatchEvent(new Event('velora:tick'));
     if (!document.hidden) timer = setTimeout(tick, 60000 - Date.now() % 60000 + 50);
   }
   document.addEventListener('visibilitychange', tick);

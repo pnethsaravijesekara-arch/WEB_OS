@@ -1,6 +1,6 @@
 import { icon, mark } from './icons';
 import { settingsContent } from './settings';
-export type AppId = 'welcome' | 'about' | 'settings' | 'files' | 'notes' | 'music' | 'gallery' | 'calculator' | 'paint' | 'calendar' | 'video' | 'clock' | 'recorder' | 'terminal';
+export type AppId = 'welcome' | 'about' | 'settings' | 'files' | 'notes' | 'music' | 'gallery' | 'calculator' | 'paint' | 'calendar' | 'video' | 'clock' | 'recorder' | 'terminal' | 'browser';
 export type GuideTab = 'start' | 'controls' | 'about';
 export const apps: { id: AppId; name: string; description: string; icon: string }[] = [
   { id: 'welcome', name: 'Welcome', description: 'Get started with Velora', icon: 'welcome' },
@@ -13,9 +13,10 @@ export const apps: { id: AppId; name: string; description: string; icon: string 
   { id:'calendar',name:'Calendar',description:'Month planner and local events',icon:'calendar' },
   { id:'paint',name:'Paint',description:'Sketch and save PNG drawings',icon:'brush' },
   { id:'video',name:'Video Player',description:'Play local movies and clips',icon:'video' },
-  { id:'clock',name:'Clock',description:'Stopwatch and countdown timer',icon:'clock' },
+  { id:'clock',name:'Clock',description:'Alarm, stopwatch and countdown timer',icon:'clock' },
   { id:'recorder',name:'Sound Recorder',description:'Record voice memos using your microphone',icon:'microphone' },
   { id:'terminal',name:'Terminal',description:'Navigate the virtual drive and run commands',icon:'terminal' },
+  { id:'browser',name:'Browser',description:'Web addresses, search and bookmarks',icon:'globe' },
   { id: 'about', name: 'About Velora', description: 'System information', icon: 'info' },
 ];
 export function appContent(id: AppId, tab: GuideTab = 'start'): string {
