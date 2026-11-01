@@ -1,6 +1,8 @@
 import veloraSymbol from './assets/velora-symbol.svg?raw';
 import settingsSymbol from './assets/settings-symbol.svg?raw';
 const paths: Record<string, string> = {
+  folder:'<path d="M3 7a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z" fill="currentColor" fill-opacity=".18"/><path d="M4 10h16"/>',
+  file:'<path d="M6 3h8l4 4v14H6zM14 3v5h4M9 12h6m-6 4h6"/>',
   plus: '<path d="M12 5v14M5 12h14"/>',
   minus: '<path d="M5 12h14"/>',
   square: '<rect x="5" y="5" width="14" height="14" rx="2"/>',

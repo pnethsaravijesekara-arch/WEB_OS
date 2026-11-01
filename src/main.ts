@@ -6,6 +6,8 @@ import './styles/personalization.css';
 import './styles/navigation.css';
 import { Navigation } from './navigation';
 import { initializeSettings, getPreferences, updatePreferences, subscribePreferences, reducedMotion } from './settings';
+import { mountFiles } from './files';
+import * as fs from './vfs';
 import { WindowManager } from './window-manager';
 import { icon, mark } from './icons';
 import { apps, type AppId, type GuideTab } from './apps';
@@ -80,6 +82,7 @@ function togglePanel(id: string, opener: HTMLElement): void {
   if(id==='launcher')navigation?.prepareLauncher();else panel.querySelector<HTMLButtonElement>('button')?.focus({preventScroll:true});
 }
 const wm = new WindowManager({
+  mount:(w)=>{if(w.app==='files')return mountFiles(w.element.querySelector('.window-content')!,n=>void previewFile(n));},
   host: document.querySelector<HTMLElement>('#windows')!, reduced: () => reduceMotion,
   beforeFocus: () => closePanels(), announce: text => { announcer.textContent = text; },
   changed: () => {
@@ -224,3 +227,15 @@ const clock = startClock();
 const skipButton=boot.querySelector<HTMLButtonElement>('button')!;
 skipButton.disabled=true;
 void initializeSettings().finally(()=>{skipButton.disabled=false;startBoot();});
+
+async function previewFile(n:fs.Entry):Promise<void>{
+  const dialog=document.createElement('dialog');dialog.className='system-dialog';
+  const title=document.createElement('h2');title.textContent=n.name;dialog.append(title);
+  const area=document.createElement('div');const close=document.createElement('button');close.textContent='Close preview';dialog.append(area,close);document.body.append(dialog);dialog.showModal();
+  let url='';close.onclick=()=>dialog.close();dialog.onclose=()=>{if(url)URL.revokeObjectURL(url);dialog.remove();};
+  try{const file=await fs.body(n.id);if(!dialog.open)return;
+    if(n.type.startsWith('image/')){const image=document.createElement('img');image.alt=n.name;image.style.maxWidth='100%';url=URL.createObjectURL(file);image.src=url;area.append(image);}
+    else if(n.type.startsWith('text/')||/\.(txt|md)$/i.test(n.name)){const pre=document.createElement('pre');pre.style.cssText='white-space:pre-wrap;overflow:auto;max-height:50vh';pre.textContent=await file.slice(0,262144).text();area.append(pre);}
+    else area.textContent='No preview available · '+n.size+' bytes';
+  }catch{area.textContent='Unable to open this file.';}
+}

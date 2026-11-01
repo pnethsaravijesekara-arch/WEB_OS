@@ -1,13 +1,15 @@
 import { icon, mark } from './icons';
 import { settingsContent } from './settings';
-export type AppId = 'welcome' | 'about' | 'settings';
+export type AppId = 'welcome' | 'about' | 'settings' | 'files';
 export type GuideTab = 'start' | 'controls' | 'about';
 export const apps: { id: AppId; name: string; description: string; icon: string }[] = [
   { id: 'welcome', name: 'Welcome', description: 'Get started with Velora', icon: 'welcome' },
   { id: 'settings', name: 'Settings', description: 'Personalize theme, accent, wallpaper and dock', icon: 'settings' },
+  { id:'files',name:'Files',description:'Explore and import local files',icon:'folder' },
   { id: 'about', name: 'About Velora', description: 'System information', icon: 'info' },
 ];
 export function appContent(id: AppId, tab: GuideTab = 'start'): string {
+  if (id === 'files') return '';
   if (id === 'settings') return settingsContent();
   const selected = id === 'about' ? 'about' : tab;
   const content = selected === 'about' ? `

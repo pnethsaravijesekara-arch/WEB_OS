@@ -5,9 +5,9 @@ import { clampRect, placementRect, resized, type Rect, type Placement } from './
 
 export interface ManagedWindow {
   id: number; app: AppId; title: string; element: HTMLElement; rect: Rect;
-  normal: Rect; mode: Placement; minimized: boolean; animation?: Animation;
+  normal: Rect; mode: Placement; minimized: boolean; animation?: Animation; dispose?:()=>void;
 }
-interface Options { host: HTMLElement; reduced: () => boolean; changed: () => void; beforeFocus: () => void; announce: (text: string) => void }
+interface Options { mount?:(w:ManagedWindow,file?:string)=>void|(()=>void); host: HTMLElement; reduced: () => boolean; changed: () => void; beforeFocus: () => void; announce: (text: string) => void }
 export class WindowManager {
   windows: ManagedWindow[] = [];
   active: number | null = null;
@@ -50,7 +50,7 @@ export class WindowManager {
     animation.onfinish = () => { done?.(); animation.cancel(); if (w.animation === animation) w.animation = undefined; };
   }
   get(id: number | null): ManagedWindow | undefined { return this.windows.find(w => w.id === id); }
-  open(app: AppId): void {
+  open(app: AppId,file?:string): void {
     const definition = apps.find(item => item.id === app); if (!definition) return;
     const id = ++this.serial, offset = (this.windows.length % 6) * 30;
     const area = this.area();
@@ -84,6 +84,7 @@ export class WindowManager {
       w.rect = target.dataset.edge ? resized(w.rect, target.dataset.edge, dx, dy, this.area()) : clampRect({ ...w.rect, x: w.rect.x + dx, y: w.rect.y + dy }, this.area());
       w.normal = { ...w.rect }; this.paint(w);
     });
+    w.dispose=this.options.mount?.(w,file)||undefined;
     syncSettings();document.dispatchEvent(new CustomEvent('velora:open',{detail:app}));
     this.focus(id); this.animate(w); this.options.announce(`${w.title} opened`);
   }
@@ -120,6 +121,7 @@ export class WindowManager {
     const w = this.get(id); if (!w) return;
     this.cancelGesture?.();
     // Remove focus targets immediately; the short visual exit is decorative.
+    w.dispose?.();
     w.element.inert = true;
     this.windows = this.windows.filter(item => item !== w);
     this.animate(w, true, () => { w.element.remove(); });
@@ -128,7 +130,7 @@ export class WindowManager {
   }
   closeAll(): void {
     this.cancelGesture?.();
-    for (const w of this.windows) { w.animation?.cancel(); w.element.remove(); }
+    for (const w of this.windows) { w.dispose?.(); w.animation?.cancel(); w.element.remove(); }
     this.options.host.querySelectorAll('.app-window').forEach(el => el.remove());
     this.windows = []; this.active = null; this.options.changed();
   }

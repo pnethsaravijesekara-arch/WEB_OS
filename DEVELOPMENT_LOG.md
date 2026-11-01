@@ -178,3 +178,6 @@ Publication note: direct `git push` lacked HTTPS credentials in the execution en
 
 ## Checkpoint 03 · Navigation and Settings
 Built keyboard search, recent apps, command palette, window switcher and desktop actions. Added the requested personalization early with IndexedDB, resizable and repositionable dock, theme/accent settings, local photo import and original SVG marks. Ran the production build and ten unit tests. In Chrome, opened Settings, selected Dark and Violet, moved the dock to the left, reduced the size to 36 px and observed the saved state. Reveal: launch Settings from the keyboard and change the desktop in one shot. Voiceover: “දැන් keyboard එකෙන් app එක හොයලා, theme එකත් dock එකත් මට කැමති විදිහට වෙනස් කරන්න පුළුවන්.”
+
+## Checkpoint 04 · Virtual drive
+Added transactional IndexedDB metadata and Blob stores, folders, text creation, browser file import, move, rename, confirmed recursive delete and text/image previews. Tested production compilation and created Studio.txt through Files. Waited for it to appear, reloaded Chrome, reopened Files and found Studio.txt. Reveal and Sinhala narration: “Browser එක reload කළත් අපි හදපු file එක අපේ drive එකේ තියෙනවා.” Source: vfs.ts, files.ts, ui.ts and window lifecycle integration.
