@@ -193,3 +193,9 @@ Built a keyboard shell in terminal.ts, registered its vector icon and wired it t
 
 Reveal: type “open calculator” from inside Documents.
 Sinhala VO — “Terminal එකෙන් අපේ drive එක ඇතුළේ යන්නත්, වෙන app එකක් අරින්නත් පුළුවන්.”
+
+## 07 · First Light
+Added powered-off startup, Start PC, skippable boot, live wallpaper and automatic About reveal. User interaction cancels the pending reveal. Focus mode and wallpaper motion are saved with theme, accent and dock settings. Workspace overview shows actual window placement and returns to the chosen app. Changed main.ts, apps.ts, settings.ts, preferences.ts, navigation.ts and personalization.css. In Chrome, Start PC opened About automatically, a keyboard Paint stroke saved as PNG opened in Gallery, and overview showed four real windows after adding a Calendar event. The build and twelve unit tests passed.
+
+Reveal: power on, let the wallpaper and About appear, then show all running apps in overview.
+Sinhala VO — “Start PC ඔබද්දි desktop එක පණ ගන්නවා. මේ තියෙන්නේ අපේම Velora OS එක.”

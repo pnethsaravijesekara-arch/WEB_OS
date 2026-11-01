@@ -2,10 +2,10 @@ export type Theme = 'light' | 'dark' | 'system';
 export interface Preferences {
   theme: Theme; accent: string; wallpaper: 'aurora' | 'dusk' | 'sand' | 'custom';
   dockPosition: 'bottom' | 'left' | 'right'; dockSize: number; dockHide: boolean;
-  motion: boolean; transparency: boolean; recent: string[];
+  live:boolean; focus:boolean; motion: boolean; transparency: boolean; recent: string[];
 }
 export const accents = ['#3579ed', '#8061d9', '#187d69', '#b75274', '#a96524'];
-export const defaults: Preferences = { theme:'light', accent:accents[0], wallpaper:'aurora', dockPosition:'bottom', dockSize:52, dockHide:false, motion:false, transparency:false, recent:[] };
+export const defaults: Preferences = { theme:'light', accent:accents[0], wallpaper:'aurora', dockPosition:'bottom', dockSize:52, dockHide:false, live:true, focus:false, motion:false, transparency:false, recent:[] };
 export function sanitizePreferences(value: unknown): Preferences {
   const v = value && typeof value === 'object' ? value as Record<string,unknown> : {};
   return {
@@ -14,7 +14,7 @@ export function sanitizePreferences(value: unknown): Preferences {
     wallpaper: ['aurora','dusk','sand','custom'].includes(String(v.wallpaper)) ? v.wallpaper as Preferences['wallpaper'] : 'aurora',
     dockPosition: ['bottom','left','right'].includes(String(v.dockPosition)) ? v.dockPosition as Preferences['dockPosition'] : 'bottom',
     dockSize: typeof v.dockSize === 'number' && Number.isFinite(v.dockSize) ? Math.min(64,Math.max(36,Math.round(v.dockSize))) : 52,
-    dockHide: v.dockHide === true, motion: v.motion === true, transparency:v.transparency === true,
+    live:v.live!==false, focus:v.focus===true, dockHide: v.dockHide === true, motion: v.motion === true, transparency:v.transparency === true,
     recent: Array.isArray(v.recent) ? [...new Set(v.recent.filter(x=>['welcome','about','settings','files','notes','music','gallery','calculator','terminal','calendar','paint','video','recorder','clock'].includes(x)))].slice(0,3) : [],
   };
 }

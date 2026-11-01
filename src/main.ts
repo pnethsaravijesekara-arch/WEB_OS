@@ -23,7 +23,7 @@ const root = document.querySelector<HTMLDivElement>('#app')!;
 root.innerHTML = `
 <main class="desktop" id="desktop" aria-label="Velora desktop" tabindex="0" inert>
   <div class="wallpaper" aria-hidden="true"></div><div class="display-dimmer" aria-hidden="true"></div>
-  <header class="system-bar"><div class="system-left"><button class="system-brand" data-panel="system-menu" aria-label="Velora menu" aria-expanded="false">${mark}</button><strong id="active-label">Desktop</strong><button class="bar-button" data-panel="launcher" aria-expanded="false">Apps</button><button class="bar-button" data-app="welcome">Help</button></div><div class="system-right"><button class="status-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button><button class="status-button" data-panel="controls" aria-label="Desktop controls" aria-expanded="false">${icon('sliders')}</button><button class="clock-button" data-panel="calendar" aria-label="Open calendar" aria-expanded="false"><span data-short-date></span><span data-clock></span></button></div></header>
+  <header class="system-bar"><div class="system-left"><button class="system-brand" data-panel="system-menu" aria-label="Velora menu" aria-expanded="false">${mark}</button><strong id="active-label">Desktop</strong><button class="bar-button" data-panel="launcher" aria-expanded="false">Apps</button><button class="bar-button" data-app="welcome">Help</button></div><div class="system-right"><button class="status-button" data-action="overview" aria-label="Workspace overview" title="Workspace overview">${icon('grid')}</button><button class="status-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button><button class="status-button" data-panel="controls" aria-label="Desktop controls" aria-expanded="false">${icon('sliders')}</button><button class="clock-button" data-panel="calendar" aria-label="Open calendar" aria-expanded="false"><span data-short-date></span><span data-clock></span></button></div></header>
   <div class="desktop-shortcuts">${apps.filter(a=>['files','settings','about'].includes(a.id)).map(app=>`<button class="desktop-shortcut" data-app="${app.id}">${appTile(app.id)}<span>${app.name}</span></button>`).join('')}</div>
   <div id="windows" aria-label="Application windows"></div>
   <section class="shell-panel launcher" id="launcher" aria-labelledby="launcher-title" hidden><div class="panel-header"><h2 id="launcher-title">Applications</h2><button class="subtle-button" data-action="close-panel" aria-label="Close launcher">${icon('close')}</button></div><div class="launcher-grid">${apps.map(app=>`<button class="launcher-app" data-app="${app.id}">${appTile(app.id)}<strong>${app.name}</strong></button>`).join('')}</div><div class="running-windows" id="running-windows"></div><footer class="launcher-footer"><span class="user-avatar">P</span><span>Personal workspace</span><button class="subtle-button" data-action="lock" aria-label="Lock workspace">${icon('lock')}</button></footer></section>
@@ -34,8 +34,8 @@ root.innerHTML = `
   <div class="sr-only" id="announcer" role="status" aria-live="polite"></div>
 </main>
 <section class="lock-screen" id="lock-screen" aria-label="Workspace locked" hidden><div class="lock-date"><p data-date></p><div data-clock></div></div><div class="lock-account"><span class="account-avatar">P</span><h1>Personal workspace</h1><button class="unlock-button" data-action="unlock">Click to enter ${icon('arrow')}</button><small>Visual lock · no password protection</small><button class="lock-power" data-action="shutdown">${icon('power')} Shut down</button></div><button class="lock-replay" data-action="restart" aria-label="Restart workspace">${icon('replay')}</button></section>
-<section class="boot" id="boot" aria-label="Velora startup"><div class="boot-center"><div class="boot-mark">${mark}</div><div class="boot-track"><span></span></div></div><button class="skip-boot" data-action="skip">Skip startup ${icon('arrow')}</button></section>
-<section id="power-off" class="power-off" aria-label="Workspace shut down" hidden><div>${mark}<h1>Velora is shut down</h1><p>Your computer is still running.</p><button data-action="power-on">${icon('power')} Start Velora</button></div></section>
+<section class="boot" id="boot" aria-label="Velora startup" hidden><div class="boot-center"><div class="boot-mark">${mark}</div><div class="boot-track"><span></span></div></div><button class="skip-boot" data-action="skip">Skip startup ${icon('arrow')}</button></section>
+<section id="power-off" class="power-off" aria-label="Workspace powered off"><div class="power-hardware">${mark}<h1>VELORA</h1><p><i></i> Workspace powered off</p><button disabled data-action="power-on">${icon('power')} Start PC</button></div></section>
 <dialog id="power-dialog" class="power-dialog" aria-labelledby="power-title"><div class="power-symbol">${icon('power')}</div><h2 id="power-title">Shut down Velora?</h2><p id="power-description"></p><div><button data-action="cancel-power" autofocus>Cancel</button><button class="primary" data-action="confirm-power">Shut down</button></div></dialog>`;
 
 const desktop = document.querySelector<HTMLElement>('#desktop')!;
@@ -47,6 +47,7 @@ let powerIntent: 'shutdown' | 'restart' = 'shutdown';
 let powerOpener: HTMLElement | null = null;
 const announcer = document.querySelector<HTMLElement>('#announcer')!;
 let bootTimer: ReturnType<typeof setTimeout>;
+let revealTimer:ReturnType<typeof setTimeout>;
 let panelOpener: HTMLElement | null = null;
 let activePanel: HTMLElement | null = null;
 let navigation: Navigation | undefined;
@@ -122,7 +123,7 @@ function resetDisplay(): void {
   desktop.style.setProperty('--dim','0');document.querySelector<HTMLInputElement>('#brightness')!.value='100';document.querySelector('#brightness-value')!.textContent='100%';
 }
 function shutDown(): void {
-  clearTimeout(bootTimer);closePanels();wm.closeAll();clock.pause();resetDisplay();
+  clearTimeout(bootTimer);clearTimeout(revealTimer);closePanels();wm.closeAll();clock.pause();resetDisplay();
   boot.hidden=true;lockScreen.hidden=true;desktop.inert=true;powerOff.hidden=false;
   powerOff.querySelector<HTMLButtonElement>('button')!.focus();
   if(document.fullscreenElement)void document.exitFullscreen().catch(()=>{});
@@ -135,6 +136,7 @@ powerDialog.addEventListener('close',()=>{
   else document.querySelector<HTMLButtonElement>('.system-brand')?.focus();
 });
 function lock(): void {
+  clearTimeout(revealTimer);
   closePanels();desktop.inert=true;lockScreen.hidden=false;
   lockScreen.animate([{opacity:0},{opacity:1}],{duration:motionDuration(220)});
   lockScreen.querySelector<HTMLButtonElement>('.unlock-button')?.focus();
@@ -145,12 +147,16 @@ function unlock(): void {
   document.querySelector<HTMLButtonElement>('.launcher-trigger')?.focus();
 }
 function finishBoot(): void {
+  if(boot.hidden)return;
   clearTimeout(bootTimer);boot.hidden=true;desktop.inert=false;
   desktop.animate([{opacity:0,transform:'scale(1.04)'},{opacity:1,transform:'scale(1)'}],{duration:motionDuration(450),easing:'cubic-bezier(.16,1,.3,1)'});
   document.querySelector<HTMLButtonElement>('.launcher-trigger')?.focus();
+  revealTimer=setTimeout(()=>{
+    if(!desktop.inert&&!wm.windows.length&&!activePanel&&!document.querySelector('dialog[open]'))wm.open('about');
+  },motionDuration(550));
 }
 function startBoot(): void {
-  clearTimeout(bootTimer);closePanels();wm.closeAll();clock.resume();resetDisplay();
+  clearTimeout(bootTimer);clearTimeout(revealTimer);closePanels();wm.closeAll();clock.resume();resetDisplay();
   powerOff.hidden=true;lockScreen.hidden=true;desktop.inert=true;boot.hidden=false;
   boot.querySelector<HTMLButtonElement>('button')?.focus();
   bootTimer=setTimeout(finishBoot,reduceMotion?500:2100);
@@ -180,6 +186,7 @@ document.addEventListener('click',event=>{
   if(button?.dataset.panel){togglePanel(button.dataset.panel,button);return;}
   if(button?.dataset.guide && windowId!==null){wm.guide(windowId,button.dataset.guide as GuideTab);return;}
   switch(button?.dataset.action){
+    case 'overview':showOverview();return;
     case 'skip':finishBoot();return;
     case 'restart':askPower('restart',button);return;
     case 'shutdown':askPower('shutdown',button);return;
@@ -206,13 +213,14 @@ document.querySelector<HTMLInputElement>('#brightness')!.addEventListener('input
   document.querySelector('#brightness-value')!.textContent=`${value}%`;
 });
 document.addEventListener('keydown',event=>{
-  if(powerDialog.open || !powerOff.hidden)return;
+  if(powerDialog.open || !powerOff.hidden || document.querySelector('.system-dialog[open]'))return;
   if(navigation?.handleKey(event))return;
   if(event.key==='Escape'){
     if(!boot.hidden){if(!skipButton.disabled)finishBoot();}else if(!lockScreen.hidden)unlock();else if(activePanel)closePanels(true);
     return;
   }
   if(desktop.inert)return;
+  if(event.ctrlKey&&event.altKey&&event.code==='KeyO'){event.preventDefault();showOverview();return;}
   if(event.ctrlKey && event.altKey && event.code==='Space'){event.preventDefault();togglePanel('launcher',document.querySelector<HTMLElement>('.launcher-trigger')!);return;}
   if(event.ctrlKey && event.altKey){
     const id=wm.active;
@@ -228,6 +236,8 @@ document.addEventListener('keydown',event=>{
 });
 navigation=new Navigation({wm,closePanels,canUse:()=>!desktop.inert&&!powerDialog.open,runAction:id=>{
   if(id==='desktop'){closePanels();[...wm.windows].forEach(w=>wm.minimize(w.id));}
+  else if(id==='overview')showOverview();
+  else if(id==='focus')updatePreferences({focus:!getPreferences().focus});
   else if(id==='fullscreen')void toggleFullscreen();
   else if(id==='lock')lock();
   else if(id==='shutdown')askPower('shutdown',document.querySelector<HTMLElement>('.system-brand')!);
@@ -241,7 +251,28 @@ subscribePreferences(()=>{
 const clock = startClock();
 const skipButton=boot.querySelector<HTMLButtonElement>('button')!;
 skipButton.disabled=true;
-void initializeSettings().finally(()=>{skipButton.disabled=false;startBoot();});
+clock.pause();
+const powerButton=powerOff.querySelector<HTMLButtonElement>('button')!;
+void initializeSettings().finally(()=>{skipButton.disabled=false;powerButton.disabled=false;powerButton.focus();});
+document.addEventListener('visibilitychange',()=>document.documentElement.classList.toggle('page-hidden',document.hidden));
+desktop.addEventListener('pointerdown',()=>clearTimeout(revealTimer));
+desktop.addEventListener('keydown',()=>clearTimeout(revealTimer));
+
+function showOverview():void {
+  closePanels();
+  const dialog=document.createElement('dialog');dialog.className='system-dialog overview';dialog.setAttribute('aria-label','Workspace overview');
+  dialog.innerHTML='<header><div><small>MISSION VIEW</small><h2>Workspace overview</h2></div><button aria-label="Close overview">×</button></header><div class="overview-grid"></div>';
+  const grid=dialog.querySelector<HTMLElement>('.overview-grid')!;
+  dialog.querySelector('button')!.onclick=()=>dialog.close();
+  if(!wm.windows.length)grid.textContent='Your desktop is clear. Open an app from the dock.';
+  for(const w of [...wm.windows].reverse()){
+    const card=document.createElement('button');card.className='overview-card';
+    const rect=w.rect;
+    card.innerHTML='<span class="mini-space"><i style="left:'+rect.x/innerWidth*100+'%;top:'+rect.y/innerHeight*100+'%;width:'+rect.width/innerWidth*100+'%;height:'+rect.height/innerHeight*100+'%">'+appTile(w.app)+'</i></span><strong>'+w.title+'</strong><small>'+(w.minimized?'Minimized':wm.active===w.id?'Active':'Open')+'</small>';
+    card.onclick=()=>{dialog.close();wm.focus(w.id);};grid.append(card);
+  }
+  document.body.append(dialog);dialog.onclose=()=>dialog.remove();dialog.showModal();
+}
 
 async function previewFile(n:fs.Entry):Promise<void>{
   const dialog=document.createElement('dialog');dialog.className='system-dialog';
