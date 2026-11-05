@@ -3,11 +3,12 @@ export interface Preferences {
   theme: Theme; accent: string; wallpaper: 'aurora' | 'dusk' | 'sand' | 'custom';
   dockPosition: 'bottom' | 'left' | 'right'; dockSize: number; dockHide: boolean;
   widgetClock:boolean; widgetCalendar:boolean; widgetWeather:boolean; widgetCity:string;
+  clockFace:'air'|'stack'|'dial'; clockInk:'auto'|'light'|'dark';
   widgetStyle:'glass'|'solid'|'outline'; widgetColor:'ocean'|'moss'|'plum'|'amber'; widgetPosition:'top'|'lower';
   live:boolean; focus:boolean; motion: boolean; transparency: boolean; recent: string[];
 }
 export const accents = ['#3579ed', '#8061d9', '#187d69', '#b75274', '#a96524'];
-export const defaults: Preferences = { theme:'light', accent:accents[0], wallpaper:'aurora', dockPosition:'bottom', dockSize:52, dockHide:false, widgetClock:true, widgetCalendar:false, widgetWeather:false, widgetCity:'', widgetStyle:'glass', widgetColor:'ocean',widgetPosition:'top', live:true, focus:false, motion:false, transparency:false, recent:[] };
+export const defaults: Preferences = { theme:'light', accent:accents[0], wallpaper:'aurora', dockPosition:'bottom', dockSize:52, dockHide:false, widgetClock:true, widgetCalendar:false, widgetWeather:false, widgetCity:'', clockFace:'air',clockInk:'auto',widgetStyle:'glass', widgetColor:'ocean',widgetPosition:'top', live:true, focus:false, motion:false, transparency:false, recent:[] };
 export function sanitizePreferences(value: unknown): Preferences {
   const v = value && typeof value === 'object' ? value as Record<string,unknown> : {};
   return {
@@ -18,6 +19,8 @@ export function sanitizePreferences(value: unknown): Preferences {
     dockSize: typeof v.dockSize === 'number' && Number.isFinite(v.dockSize) ? Math.min(64,Math.max(36,Math.round(v.dockSize))) : 52,
     widgetClock:v.widgetClock!==false, widgetCalendar:v.widgetCalendar===true, widgetWeather:v.widgetWeather===true,
     widgetCity:typeof v.widgetCity==='string'?v.widgetCity.trim().slice(0,80):'',
+    clockFace:v.clockFace==='stack'||v.clockFace==='dial'?v.clockFace:'air',
+    clockInk:v.clockInk==='dark'||v.clockInk==='light'?v.clockInk:'auto',
     widgetStyle:v.widgetStyle==='solid'||v.widgetStyle==='outline'?v.widgetStyle:'glass',
     widgetColor:v.widgetColor==='moss'||v.widgetColor==='plum'||v.widgetColor==='amber'?v.widgetColor:'ocean',
     widgetPosition:v.widgetPosition==='lower'?'lower':'top',

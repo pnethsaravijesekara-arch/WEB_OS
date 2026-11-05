@@ -123,6 +123,7 @@ export class WindowManager {
     // Remove focus targets immediately; the short visual exit is decorative.
     w.dispose?.();
     w.element.inert = true;
+    w.element.classList.remove('is-active');
     this.windows = this.windows.filter(item => item !== w);
     this.animate(w, true, () => { w.element.remove(); });
     if (this.active === id) this.focusNext(); else this.options.changed();

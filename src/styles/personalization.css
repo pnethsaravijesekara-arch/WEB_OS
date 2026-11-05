@@ -22,7 +22,59 @@
 .overview{width:min(700px,94vw);max-height:80vh;overflow:auto}.overview header{display:flex;align-items:center;justify-content:space-between}.overview-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-top:20px}.overview-card{text-align:left;display:grid;gap:5px}.mini-space{position:relative;display:block;height:90px;background:var(--wallpaper) center/cover;border-radius:7px;overflow:hidden}.mini-space i{display:grid;place-items:center;position:absolute;min-width:22px;min-height:12px;border-radius:3px;background:var(--surface);box-shadow:0 2px 5px #0004}.mini-space .app-icon{width:18px;height:18px;border-radius:4px}.mini-space .app-icon svg{width:12px;height:12px}
 @media(max-width:500px){.release-info{padding:16px 18px}.release-info dl{gap:14px}.system-left strong{max-width:65px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.release-series{font-size:8px}}
 .browser-icon{color:#fff;background:linear-gradient(155deg,#62c3e2,#3268ba)}.web-app{height:100%;min-height:220px;display:flex;flex-direction:column;color:var(--ink);background:var(--surface)}.web-app .tool-toolbar{flex-wrap:nowrap;gap:4px}.web-app .tool-toolbar button{padding:4px 9px;border-radius:6px;background:var(--surface-raised);color:var(--ink)}.web-app input{min-width:30px;flex:1;border:1px solid var(--line);background:var(--surface-raised);color:var(--ink);border-radius:6px;padding:6px}.web-page{flex:1;min-height:125px;overflow:auto}.web-page iframe{border:0;width:100%;height:100%;background:white}.web-start{padding:clamp(18px,6%,44px)}.web-start small{letter-spacing:.2em;color:var(--muted);font-size:10px}.web-start h1{font-size:36px;letter-spacing:-.05em;margin:8px 0}.web-start p,.web-status{font-size:12px;line-height:1.7;color:var(--muted)}.web-status{padding:7px 12px;border-top:1px solid var(--line)}.web-status a{color:var(--accent)}.web-links{display:flex;flex-direction:column;align-items:start;gap:6px;margin-top:15px}.web-links button{max-width:100%;overflow-wrap:anywhere;background:var(--selection);color:var(--ink);padding:8px;border-radius:6px}.alarm-face input{width:auto}.alarm-ring p{margin:12px 0}
-.desktop-widgets{--widget-tint:#34558c;position:absolute;top:62px;left:24px;display:grid;gap:8px;width:min(174px,30vw);max-height:calc(100% - 170px);overflow:auto;scrollbar-width:thin;color:white}.desktop-widgets[data-position=lower]{top:auto;bottom:100px}.desktop-widgets[data-color=moss]{--widget-tint:#315f51}.desktop-widgets[data-color=plum]{--widget-tint:#714c79}.desktop-widgets[data-color=amber]{--widget-tint:#87562e}.widget{text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:1px solid #ffffff52;border-radius:16px;background:linear-gradient(125deg,color-mix(in srgb,var(--widget-tint) 74%,transparent),color-mix(in srgb,var(--widget-tint) 54%,transparent));color:white}.widget small{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.12em}.widget small .icon{width:12px;height:12px}.widget strong{font-size:32px;line-height:1.1;letter-spacing:-.06em;font-weight:530;font-variant-numeric:tabular-nums}.widget span,.widget .weather-status{font-size:10px;letter-spacing:0;line-height:1.45}.widget-weather>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.widget a,.weather-refresh{font-size:9px;color:white}.weather-refresh{border-radius:5px;background:#ffffff25;padding:4px 7px}.desktop-widgets[data-skin=solid] .widget,.reduce-transparency .widget{background:var(--widget-tint)}.desktop-widgets[data-skin=outline] .widget{background:color-mix(in srgb,var(--widget-tint) 28%,#16253f61);border:2px solid color-mix(in srgb,var(--widget-tint) 30%,white)}.focus-mode .desktop-widgets{visibility:hidden}:root[data-dock=left] .desktop-widgets{left:calc(var(--dock-size) + 38px)}.settings-group input[data-city-input]{width:42%;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:7px;border-radius:5px}
-@media(max-width:600px){.desktop-widgets,:root[data-dock=left] .desktop-widgets{left:12px;top:50px;width:140px}.desktop-widgets[data-position=lower]{top:auto;bottom:80px}.widget{padding:10px}.settings-sidebar nav{flex-wrap:wrap}.desktop-widgets .widget strong{font-size:26px}}
+.desktop-widgets{--widget-tint:#34558c;position:absolute;top:62px;left:24px;display:grid;gap:8px;width:min(212px,40vw);max-height:calc(100% - 170px);overflow:auto;scrollbar-width:thin;color:white}.desktop-widgets[data-position=lower]{top:auto;bottom:100px}.desktop-widgets[data-color=moss]{--widget-tint:#315f51}.desktop-widgets[data-color=plum]{--widget-tint:#714c79}.desktop-widgets[data-color=amber]{--widget-tint:#87562e}.widget{text-align:left;display:flex;flex-direction:column;align-items:flex-start;gap:5px;padding:15px;border:1px solid #ffffff52;border-radius:16px;background:linear-gradient(125deg,color-mix(in srgb,var(--widget-tint) 74%,transparent),color-mix(in srgb,var(--widget-tint) 54%,transparent));color:white}.widget small{display:flex;align-items:center;gap:5px;font-size:9px;letter-spacing:.12em}.widget small .icon{width:12px;height:12px}.widget strong{font-size:32px;line-height:1.1;letter-spacing:-.06em;font-weight:530;font-variant-numeric:tabular-nums}.widget span,.widget .weather-status{font-size:10px;letter-spacing:0;line-height:1.45}.widget-weather>div{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.widget a,.weather-refresh{font-size:9px;color:white}.weather-refresh{border-radius:5px;background:#ffffff25;padding:4px 7px}.desktop-widgets[data-skin=solid] .widget,.reduce-transparency .widget{background:var(--widget-tint)}.desktop-widgets[data-skin=outline] .widget{background:color-mix(in srgb,var(--widget-tint) 28%,#16253f61);border:2px solid color-mix(in srgb,var(--widget-tint) 30%,white)}.focus-mode .desktop-widgets{visibility:hidden}:root[data-dock=left] .desktop-widgets{left:calc(var(--dock-size) + 38px)}.settings-group input[data-city-input]{width:42%;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:7px;border-radius:5px}
+@media(max-width:600px){.desktop-widgets,:root[data-dock=left] .desktop-widgets{left:12px;top:50px;width:min(174px,48vw)}.desktop-widgets[data-position=lower]{top:auto;bottom:80px}.widget{padding:10px}.settings-sidebar nav{flex-wrap:wrap}.desktop-widgets .widget strong{font-size:26px}}
 
 .city-apply{background:var(--selection);color:var(--accent);border-radius:6px;padding:7px 14px;margin:0 15px 12px;font-size:12px}
+
+/* The almanac uses the wallpaper as its surface. Weather has a separate material. */
+.desktop-widgets {
+  --pale-ink:#edf5ff;
+  --deep-ink:#142c51;
+  --face-ink:var(--pale-ink);
+  --face-shadow:0 1px 2px #0a173b88, 0 3px 14px #142c5144;
+}
+.desktop-widgets[data-color=moss] {--pale-ink:#ddffeb;--deep-ink:#123c31}
+.desktop-widgets[data-color=plum] {--pale-ink:#ffdeef;--deep-ink:#462241}
+.desktop-widgets[data-color=amber] {--pale-ink:#ffedc3;--deep-ink:#492d16}
+[data-wallpaper=sand] .desktop-widgets[data-ink=auto], .desktop-widgets[data-ink=dark] {
+  --face-ink:var(--deep-ink);--face-shadow:0 1px 2px #ffffff65;
+}
+.wall-almanac {display:grid;justify-items:start;gap:5px;padding:7px 6px 12px;color:var(--face-ink)}
+.wall-clock,.wall-date {display:grid;justify-items:start;align-content:center;border:0;background:transparent;padding:0;min-height:36px;color:inherit;text-align:start;text-shadow:var(--face-shadow)}
+.wall-clock:focus-visible,.wall-date:focus-visible {outline:2px solid currentColor;outline-offset:3px;border-radius:3px}
+.clock-numerals {display:flex;align-items:baseline;font-size:clamp(54px,6.1vw,79px);font-weight:300;line-height:1.02;letter-spacing:-.085em;font-variant-numeric:tabular-nums}
+.clock-numerals i {font:inherit;line-height:.85;margin-inline:.015em .055em;position:relative;top:-.055em}
+.clock-caption,.wall-date {font-size:14px;font-weight:550;letter-spacing:.012em;line-height:1.4}
+.clock-caption {margin:5px 0 0 3px}
+.wall-date {display:flex;align-items:center;gap:.48em;flex-wrap:wrap;margin-inline-start:3px}
+.wall-date .date-stamp::before {content:'·';margin-inline-end:.48em}
+.wall-clock[hidden]+.wall-date {display:grid;gap:0;margin:0}
+.wall-clock[hidden]+.wall-date .date-weekday {font-size:12px;font-weight:650;letter-spacing:.14em;text-transform:uppercase}
+.wall-clock[hidden]+.wall-date .date-stamp {font:italic 48px/1.12 Georgia,serif;letter-spacing:-.055em}
+.wall-clock[hidden]+.wall-date .date-stamp::before {content:none}
+.clock-dial {display:none;width:112px;height:112px;filter:drop-shadow(var(--dial-shadow,0 1px 2px #1020366b))}
+[data-face=dial] .clock-dial {display:block}
+[data-face=dial] .clock-numerals,[data-face=stack] .clock-numerals i {display:none}
+[data-face=stack] .clock-numerals {display:grid;line-height:.83;gap:.055em;font-weight:750;font-size:clamp(57px,6.5vw,84px);letter-spacing:-.085em;padding-block:4px}
+[data-face=stack] .clock-numerals [data-minutes] {font-weight:325}
+.clock-faces {display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.clock-faces button {background:var(--surface-raised);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:9px 3px;font-size:12px}
+.clock-faces button[aria-pressed=true] {border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
+.face-sample {display:grid;height:44px;place-content:center;margin:auto auto 5px;font-variant-numeric:tabular-nums}
+.sample-air {font-size:27px;letter-spacing:-.085em;font-weight:300}
+.sample-stack {font-size:21px;line-height:.82;font-weight:700;letter-spacing:-.08em}
+.sample-dial {position:relative;width:34px;height:34px;margin:5px auto 10px;border:2px dotted currentColor;border-radius:50%}
+.sample-dial::before,.sample-dial::after {content:'';position:absolute;left:50%;bottom:50%;width:2px;height:10px;background:currentColor;transform-origin:bottom;transform:rotate(55deg)}
+.sample-dial::after {height:7px;transform:rotate(-56deg)}
+.widget-weather {max-width:174px}
+@media (max-width:600px) {
+  .clock-numerals {font-size:clamp(46px,12vw,62px)}
+  .wall-almanac {padding-inline:4px}
+  .clock-caption,.wall-date {font-size:12px}
+  .clock-dial {width:88px;height:88px}
+}
+@media (forced-colors:active) {
+  .wall-almanac {color:ButtonText}
+  .wall-clock,.wall-date {text-shadow:none}
+}

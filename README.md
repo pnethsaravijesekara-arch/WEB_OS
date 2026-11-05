@@ -22,7 +22,7 @@ Download the repository ZIP, extract it, then double-click **Start Velora.bat**.
 | Terminal | Run **help**, **pwd**, **ls**, **cd**, **cat**, **mkdir**, **touch**, **date**, **history**, **apps**, **open** and **clear** on the virtual desktop. |
 | Settings, Welcome, About Velora | Configure the desktop, learn its controls and inspect the release. |
 
-**Settings → Widgets** controls clock, calendar and weather visibility, appearance and placement. Choose Glass, Solid or Outline, four color palettes and upper or lower placement. To fetch weather, enter a city, select **Apply city**, then **Refresh** on the widget. Open-Meteo receives that city lookup and its coordinates. The most recent successful reading displays its timestamp offline. No location permission is requested.
+**Settings → Widgets** controls clock, calendar and weather visibility, appearance and placement. Time and date sit directly on the wallpaper. Choose Air for a single line of digits, Stack for two rows, or Dial for analog hands. Adjust the ink for your wallpaper and choose a palette and position. Glass, Solid and Outline control the weather surface. To fetch weather, enter a city, select **Apply city**, then **Refresh** on the widget. Open-Meteo receives that city lookup and its coordinates. The most recent successful reading displays its timestamp offline. No location permission is requested.
 
 Settings also includes light, dark and system appearance, accent colors, wallpaper import, live wallpaper, focus mode, reduced motion and dock size, position and auto-hide. A desktop lock covers the UI without authenticating the user. Shutdown and restart affect the Velora workspace.
 

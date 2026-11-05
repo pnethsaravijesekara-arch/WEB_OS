@@ -210,3 +210,11 @@ Verified in Chrome: cold boot and automatic About, drawing saved from Paint and 
 
 Reveal: start the Windows launcher, press Start PC and bring up the personalized workspace.
 Sinhala VO — “මේ තමයි Velora එකේ final build එක. එක click එකකින් පටන් අරන්, අපේ apps ඔක්කොම මෙතැනින් පාවිච්චි කරන්න පුළුවන්.”
+
+### Wallpaper clock and date refinement
+Rebuilt the desktop clock and calendar as borderless wallpaper elements. Added Air, Stack and Dial faces with persistent ink controls and retained the existing minute-aligned desktop timer. The date can stand alone or join the clock with a separate Calendar shortcut. Updated widgets.ts, preferences.ts, settings.ts, personalization.css, README and the Windows portable build. Chrome checks covered dark ink on Sand, Dial on Dusk, opening both apps and restoring the selected face after reboot. All 12 tests, TypeScript, Vite production compilation and the offline release harness passed.
+
+Recording cue — switch from Air to Stack, then change the wallpaper to Sand. “දැන් වෙලාවයි දිනයයි wallpaper එකේම කොටසක් වගේ පේනවා.”
+
+### Final polish verification
+Fixed closing windows retaining the active marker during their exit animation. Regenerated the Windows portable build. Twelve tests, TypeScript, production build and the offline cache harness passed. Physical Windows and microphone checks remain device-specific.
