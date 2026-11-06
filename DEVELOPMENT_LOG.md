@@ -218,3 +218,6 @@ Recording cue â€” switch from Air to Stack, then change the wallpaper to Sand. â
 
 ### Final polish verification
 Fixed closing windows retaining the active marker during their exit animation. Regenerated the Windows portable build. Twelve tests, TypeScript, production build and the offline cache harness passed. Physical Windows and microphone checks remain device-specific.
+
+### Privacy and security hardening
+Added concise import notices to Files, Music, Video and Gallery, wallpaper import guidance, a persistent external browsing/sign-in notice and an About safety note. External web addresses require HTTPS. Embedded sites cannot submit forms and have explicit permission restrictions. Users can open sign-in pages in their normal browser. Documented hosting and third-party network activity without claiming zero-network operation, audited security or legal immunity.

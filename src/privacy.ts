@@ -1,0 +1,2 @@
+export const importNotice = '<p class="privacy-notice">Local import · Files stay in this browser’s storage. Avoid sensitive files and keep backups. Clearing site data can remove saved work.</p>';
+export const browserNotice = '<aside class="privacy-notice">External websites receive your requests and apply their own privacy policies. For sign-in, use “Open in browser tab” and check the destination. Velora does not provide a secure browser or password vault.</aside>';

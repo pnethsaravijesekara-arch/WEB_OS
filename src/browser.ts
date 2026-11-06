@@ -1,3 +1,4 @@
+import {browserNotice} from './privacy';
 import {errorText} from './ui';
 
 export function mountBrowser(root:HTMLElement):void{
@@ -5,6 +6,7 @@ export function mountBrowser(root:HTMLElement):void{
   const history=[home];let cursor=0;
   const key='velora-bookmarks';
   root.innerHTML=`<section class="web-app"><form class="tool-toolbar"><button type="button" data-back aria-label="Back">‹</button><button type="button" data-forward aria-label="Forward">›</button><button type="button" data-home aria-label="Home">⌂</button><input aria-label="Web address or search" placeholder="Search or enter address"><button>Go</button><button type="button" data-bookmark aria-label="Bookmark this page">☆</button></form><div class="web-page"></div><footer class="web-status" role="status"></footer></section>`;
+  root.querySelector('.tool-toolbar')!.insertAdjacentHTML('afterend',browserNotice);
   const field=root.querySelector('input')!,page=root.querySelector<HTMLElement>('.web-page')!,status=root.querySelector<HTMLElement>('footer')!;
   const back=root.querySelector<HTMLButtonElement>('[data-back]')!,forward=root.querySelector<HTMLButtonElement>('[data-forward]')!;
   function address(raw:string):string{
@@ -14,6 +16,7 @@ export function mountBrowser(root:HTMLElement):void{
     if(explicit&&!/^https?:\/\//i.test(raw))throw Error('Use an HTTP or HTTPS web address.');
     if(!explicit&&(!raw.includes('.')||/\s/.test(raw)))return 'https://www.bing.com/search?q='+encodeURIComponent(raw);
     const u=new URL(explicit?raw:'https://'+raw);
+    if(u.protocol!=='https:')throw Error('Use HTTPS for external websites.');
     if(u.username||u.password)throw Error('Use a web address without embedded credentials.');
     return u.href;
   }
@@ -29,7 +32,7 @@ export function mountBrowser(root:HTMLElement):void{
       else link('Return home',home);
       status.textContent='Local page · available offline';return;
     }
-    const frame=document.createElement('iframe');frame.title='Web page';frame.sandbox.add('allow-scripts','allow-forms');frame.referrerPolicy='no-referrer';frame.src=url;page.append(frame);
+    const frame=document.createElement('iframe');frame.title='Web page';frame.sandbox.add('allow-scripts');frame.allow="camera 'none'; microphone 'none'; geolocation 'none'; payment 'none'; clipboard-read 'none'; clipboard-write 'none'";frame.referrerPolicy='no-referrer';frame.src=url;page.append(frame);
     const outside=document.createElement('a');outside.textContent='Open in browser tab ↗';outside.href=url;outside.target='_blank';outside.rel='noopener noreferrer';
     status.append('Some sites require a separate tab. ',outside);
   }

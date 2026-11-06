@@ -56,3 +56,10 @@ The build produces **dist/** for static hosting and regenerates the portable **V
 The project uses Vite, TypeScript and browser APIs. No runtime framework, remote fonts or cloud account are required by the application. Media decoding depends on the browser. File imports are limited to 64 MB and editable notes to 1 MB.
 
 See DEVELOPMENT_LOG.md for the checkpoint history, ROADMAP.md for coverage, and docs/DEMO_CHECKLIST.md and docs/YOUTUBE_SCRIPT_SI.md for filming.
+
+## Privacy and security notice
+Velora is an experimental client-side browser desktop, without an independent security audit. File imports and desktop data are processed and saved in browser storage. Keep backups and avoid passwords, financial information and other sensitive files. The visual lock is not authentication. Clearing site data can remove saved work.
+
+The hosted page still contacts its hosting provider, which may keep access logs. Weather refresh sends a city lookup and coordinates to Open-Meteo. Web searches and external pages contact their respective services. Their policies apply. Sign in through your regular browser tab after checking the destination. These network features mean the experience must not be advertised as entirely offline or zero network traffic.
+
+External embedded pages are sandboxed without form submission or same-origin privileges, with camera, microphone, geolocation, payment and clipboard access denied. External addresses require HTTPS. This is risk reduction, not a security or legal guarantee. No analytics or cloud file upload service was added by this change.

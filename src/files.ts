@@ -1,9 +1,11 @@
+import {importNotice} from './privacy';
 import * as fs from './vfs';
 import {ask,errorText,escapeHTML as h} from './ui';
 import {icon} from './icons';
 export function mountFiles(root:HTMLElement,openFile:(n:fs.Entry)=>void):()=>void{
   const lifetime=new AbortController();let folder=fs.ROOT,selected='',rows:fs.Entry[]=[],generation=0;
   root.innerHTML='<div class="tool-shell"><div class="tool-toolbar"><button data-f="up" aria-label="Parent folder">↑</button><strong class="file-path">/</strong><button data-f="folder">New folder</button><button data-f="file">New text</button><label class="import-button">Import<input type="file" multiple aria-label="Import local files"></label></div><div class="file-list"></div><div class="file-actions"><button data-f="open">Open</button><button data-f="rename">Rename</button><button data-f="move">Move</button><button data-f="delete">Delete</button></div><p class="tool-status" role="status"></p></div>';
+  root.querySelector('.tool-toolbar')!.insertAdjacentHTML('afterend',importNotice);
   const list=root.querySelector<HTMLElement>('.file-list')!,status=root.querySelector<HTMLElement>('.tool-status')!;
   function paint(){const items=rows.filter(n=>n.parent===folder).sort((a,b)=>Number(b.folder)-Number(a.folder)||a.name.localeCompare(b.name));
     root.querySelector('.file-path')!.textContent=fs.pathOf(rows,folder);

@@ -1,3 +1,4 @@
+import {importNotice} from './privacy';
 import * as fs from './vfs';
 import {ask,errorText,escapeHTML as h} from './ui';
 import {calculate} from './calculation';
@@ -37,6 +38,7 @@ export function mountMedia(root:HTMLElement,kind:'music'|'gallery'|'video',initi
   const music=kind==='music',video=kind==='video',matches=video?isVideo:music?isAudio:isImage;
   const medium=video?'video':music?'audio':'image';
   root.innerHTML='<div class="tool-shell media-app '+kind+'"><div class="tool-toolbar"><strong>'+ (video?'Video library':music?'Music library':'Image gallery')+'</strong><label class="import-button">Import '+medium+'<input aria-label="Import '+medium+'" type="file" multiple accept="'+(medium+'/*')+'"></label></div><div class="media-stage">'+(video?'<video controls playsinline preload="metadata" aria-label="Video playback"></video>':music?'<div class="record-art">'+icon('music')+'</div>':'<img alt="Selected picture" hidden>')+'</div><div class="media-caption"><strong></strong><div><button data-prev aria-label="Previous item">‹</button><button data-next aria-label="Next item">›</button></div></div>'+(music?'<audio controls preload="metadata" aria-label="Music playback"></audio>':'')+'<div class="media-list"></div><p class="tool-status" role="status"></p></div>';
+  root.querySelector('.tool-toolbar')!.insertAdjacentHTML('afterend',importNotice);
   let items:fs.Entry[]=[],active='',url='',generation=0,scan=0,closed=false;
   const audio=root.querySelector<HTMLMediaElement>('audio,video'),img=root.querySelector('img'),status=root.querySelector<HTMLElement>('.tool-status')!,list=root.querySelector<HTMLElement>('.media-list')!;
   const fail=(err:unknown)=>{status.textContent=errorText(err);};

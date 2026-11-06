@@ -78,3 +78,5 @@
   .wall-almanac {color:ButtonText}
   .wall-clock,.wall-date {text-shadow:none}
 }
+
+.privacy-notice{margin:0;padding:9px 14px;font-size:11px;line-height:1.5;color:var(--muted);background:var(--sidebar);border-bottom:1px solid var(--line);user-select:text}
