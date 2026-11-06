@@ -63,3 +63,7 @@ Velora is an experimental client-side browser desktop, without an independent se
 The hosted page still contacts its hosting provider, which may keep access logs. Weather refresh sends a city lookup and coordinates to Open-Meteo. Web searches and external pages contact their respective services. Their policies apply. Sign in through your regular browser tab after checking the destination. These network features mean the experience must not be advertised as entirely offline or zero network traffic.
 
 External embedded pages are sandboxed without form submission or same-origin privileges, with camera, microphone, geolocation, payment and clipboard access denied. External addresses require HTTPS. This is risk reduction, not a security or legal guarantee. No analytics or cloud file upload service was added by this change.
+
+## License and release notices
+
+Project-authored code is available under the [MIT License](LICENSE), which permits reuse, modification and commercial distribution with its notice retained. Review [third-party and asset notices](THIRD_PARTY_NOTICES.md), [privacy and data handling](PRIVACY.md) and the [security policy](SECURITY.md) before deployment. Velora is an experimental browser desktop supplied as is. These files do not guarantee security, intellectual-property clearance or compliance in every jurisdiction.

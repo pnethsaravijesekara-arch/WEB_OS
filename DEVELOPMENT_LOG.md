@@ -221,3 +221,7 @@ Fixed closing windows retaining the active marker during their exit animation. R
 
 ### Privacy and security hardening
 Added concise import notices to Files, Music, Video and Gallery, wallpaper import guidance, a persistent external browsing/sign-in notice and an About safety note. External web addresses require HTTPS. Embedded sites cannot submit forms and have explicit permission restrictions. Users can open sign-in pages in their normal browser. Documented hosting and third-party network activity without claiming zero-network operation, audited security or legal immunity.
+
+## 2026-11-06 — Repository licensing and release notices
+
+Added LICENSE (MIT for project-authored code/documentation), SECURITY.md, PRIVACY.md and THIRD_PARTY_NOTICES.md; linked them from README.md. Recorded browser-storage limitations, network features, reporting fallback and known media provenance without claiming legal clearance. Checked direct dependency license files and documented their separate scope. Documentation-only change; application code/build unchanged. Validation: git diff --check and local notice/link checks. No legal, trademark or independent security audit performed.
